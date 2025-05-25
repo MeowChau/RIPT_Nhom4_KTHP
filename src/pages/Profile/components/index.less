@@ -1,0 +1,87 @@
+.profileCard {
+  margin-bottom: 24px;
+  
+  .avatarContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+    
+    .avatar {
+      margin-bottom: 16px;
+    }
+    
+    h2 {
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.historyCard {
+  margin-top: 24px;
+}
+
+// Styling để sử dụng cho trang gia hạn
+.renewCard {
+  .currentPackage {
+    margin-bottom: 24px;
+    padding: 16px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+  
+  .renewForm {
+    margin-top: 24px;
+  }
+  
+  .packageCard {
+    width: 100%;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+
+    &.selected {
+      border-color: #1890ff;
+      background-color: #e6f7ff;
+    }
+    
+    .packageInfo {
+      display: flex;
+      flex-direction: column;
+      
+      .price {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 8px;
+        color: #f5222d;
+      }
+      
+      .duration {
+        font-size: 14px;
+        color: #666;
+        margin-top: 4px;
+      }
+    }
+  }
+  
+  .summary {
+    margin: 20px 0;
+    padding: 16px;
+    background-color: #f0f5ff;
+    border-radius: 4px;
+    text-align: right;
+    
+    .totalPrice {
+      font-size: 24px;
+      font-weight: bold;
+      color: #f5222d;
+      display: block;
+    }
+  }
+}
+
+:global {
+  .ant-descriptions-bordered .ant-descriptions-item-label {
+    font-weight: bold;
+  }
+}

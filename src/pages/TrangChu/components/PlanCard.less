@@ -1,0 +1,103 @@
+.planCard {
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.popularPlan {
+  transform: scale(1.02);
+  border: 2px solid #ff4d4f;
+  
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
+
+.planHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.planTitle {
+  margin: 0;
+  font-weight: 600;
+}
+
+.discount {
+  .discountBadge {
+    background-color: #ff4d4f;
+    color: white;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+}
+
+.priceContainer {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  
+  .price {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    
+    .currency {
+      font-size: 20px;
+      margin-left: 2px;
+    }
+  }
+  
+  .originalPrice {
+    color: #999;
+    font-size: 18px;
+    font-weight: normal;
+  }
+}
+
+.divider {
+  margin: 16px 0;
+}
+
+.featuresList {
+  margin-bottom: 24px;
+}
+
+.featureItem {
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  
+  .checkIcon {
+    font-size: 16px;
+    color: #52c41a;
+    margin-right: 10px;
+  }
+}
+
+.actionButton {
+  font-weight: 600;
+  height: 48px;
+  font-size: 16px;
+}
+
+.ribbon {
+  font-size: 14px;
+  font-weight: bold;
+}

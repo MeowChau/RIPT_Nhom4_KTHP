@@ -1,0 +1,68 @@
+.equipmentContainer {
+  padding: 16px;
+}
+
+.emptyContainer {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.equipmentHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  
+  .equipmentIcon {
+    font-size: 24px;
+    margin-right: 12px;
+    color: #1890ff;
+  }
+}
+
+.filterContainer {
+  display: flex;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.equipmentCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.equipmentImageContainer {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.equipmentImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.equipmentAvatar {
+  background-color: #f5f5f5;
+}
+
+.equipmentName {
+  margin-bottom: 8px !important;
+}
+
+.equipmentQuantity {
+  margin-top: auto;
+}

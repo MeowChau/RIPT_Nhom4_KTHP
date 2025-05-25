@@ -1,0 +1,212 @@
+.homePage {
+  min-height: 100vh;
+}
+
+.content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+// Điều chỉnh nền nhạt hơn
+.heroBanner {
+  height: 600px;
+  // Giảm độ đậm của overlay đen trên ảnh nền
+  background-image: linear-gradient(rgba(0, 0, 0, 0.056), rgba(0, 0, 0, 0.2)), 
+    url(https://phumyhung.vn/wp-content/uploads/2020/11/Hung-Phuc-Premier-36-Copy.jpg);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 0 20px;
+  position: relative;
+}
+
+.heroTitle {
+  // Chọn màu nổi bật hơn
+  color: #f8f8f8;
+  font-size: 56px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin: 0;
+  // Tăng cường đổ bóng để chữ nổi bật hơn
+  text-shadow: 3px 3px 12px rgb(242, 236, 236), 0px 0px 5px rgb(247, 243, 243);
+  // Loại bỏ stroke để tránh làm chữ trông đen
+  -webkit-text-stroke: none;
+}
+
+// Làm nhạt gradient overlay
+.heroBanner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  // Giảm độ đậm của gradient xuống còn 0.3
+  background: linear-gradient(45deg, rgba(243, 108, 33, 0.3) 0%, rgba(21, 101, 192, 0.3) 100%);
+  z-index: 1;
+}
+.heroButton {
+  height: 50px;
+  font-size: 16px;
+  padding: 0 40px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+// Intro Section
+.introSection {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.sectionTitle {
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+}
+
+.divider {
+  margin: 20px auto 30px;
+  width: 80px;
+  min-width: 80px;
+  background-color: #f36c21;
+  height: 3px;
+}
+
+.introParagraph {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.introFeatures {
+  margin-top: 40px;
+}
+
+.featureCard {
+  height: 100%;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.featureIcon {
+  font-size: 40px;
+  color: #f36c21;
+  margin-bottom: 20px;
+}
+
+// Testimonials Section
+.testimonialsSection {
+  padding: 80px 0;
+  text-align: center;
+  background-color: #f8f9fa;
+}
+
+.testimonialCarousel {
+  max-width: 800px;
+  margin: 0 auto;
+  
+  :global(.slick-dots) {
+    margin-bottom: -15px;
+  }
+}
+
+.testimonialCard {
+  margin: 10px 20px 40px;
+  padding: 30px;
+}
+
+.testimonialText {
+  font-size: 18px;
+  font-style: italic;
+  margin-bottom: 30px;
+}
+
+.testimonialAuthor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.testimonialAvatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 16px;
+}
+
+.testimonialName {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.testimonialRole {
+  color: #666;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+// Call to Action
+.ctaSection {
+  padding: 80px 0;
+  text-align: center;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/gym-cta.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+}
+
+.ctaTitle {
+  color: white;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.ctaText {
+  color: white;
+  font-size: 18px;
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+.ctaButton {
+  height: 50px;
+  font-size: 16px;
+  padding: 0 40px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 36px;
+  }
+  
+  .introSection,
+  .testimonialsSection,
+  .ctaSection {
+    padding: 60px 0;
+  }
+  
+  .ctaTitle {
+    font-size: 28px;
+  }
+}

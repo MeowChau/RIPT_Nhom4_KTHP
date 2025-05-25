@@ -1,0 +1,47 @@
+.searchCard {
+  margin-bottom: 24px;
+}
+
+.sortWrapper {
+  display: flex;
+  align-items: center;
+  
+  .filterIcon {
+    margin-right: 12px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+}
+
+.emptyContainer {
+  background-color: #fff;
+  padding: 40px;
+  text-align: center;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+}
+
+.resultCount {
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding: 16px 0;
+}
+
+@media (max-width: 768px) {
+  .paginationContainer {
+    justify-content: center;
+  }
+}
