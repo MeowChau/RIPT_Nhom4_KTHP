@@ -22,6 +22,14 @@ export default [
     // Thêm dòng này nếu không muốn hiển thị trên menu
     hideInMenu: true,
   },
+
+  {
+    path: '/pt',
+    name: 'Huấn luyện viên',
+    icon: 'team', // hoặc bất kỳ icon nào khác phù hợp
+    component: './PTList/index',
+},
+
 	{
     path: '/user',
     name: 'Tài khoản',

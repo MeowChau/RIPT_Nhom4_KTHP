@@ -1,0 +1,55 @@
+@import '~antd/es/style/themes/default.less';
+
+.pt-table {
+  .ant-table-thead > tr > th {
+    background-color: @primary-1;
+    font-weight: 600;
+  }
+  
+  .pt-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.3s;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  .pt-description {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  
+  .pt-name {
+    font-weight: 500;
+    font-size: 15px;
+  }
+  
+  .pt-gym {
+    color: @text-color-secondary;
+    font-size: 13px;
+  }
+  
+  .action-column {
+    .ant-btn {
+      min-width: 80px;
+    }
+  }
+  
+  .ant-table-row {
+    transition: background-color 0.3s;
+    
+    &:hover {
+      background-color: @primary-1;
+    }
+  }
+}

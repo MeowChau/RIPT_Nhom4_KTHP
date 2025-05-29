@@ -1,0 +1,23 @@
+@import '~antd/es/style/themes/default.less';
+
+.pt-schedule {
+  .schedule-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    
+    .day-tag {
+      min-width: 75px;
+      text-align: center;
+      margin-right: 8px;
+      background-color: @primary-1;
+      border-color: @primary-3;
+      color: @primary-7;
+    }
+  }
+  
+  .empty-schedule {
+    color: @text-color-secondary;
+    font-style: italic;
+  }
+}
