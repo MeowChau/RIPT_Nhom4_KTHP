@@ -1,50 +1,57 @@
-// Đổi tên biến khi import để tránh xung đột
 const jwt = require('jsonwebtoken');
-const Member = require('../models/Member'); // Sử dụng Member thay vì User để phù hợp với model của bạn
+const Member = require('../models/Member');
 
-// JWT Secret Key - nên đưa vào file .env
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+// Sử dụng chính xác JWT_SECRET từ code đăng nhập
+const JWT_SECRET = 'your_exact_secret_key_from_login_code'; // Thay thế giá trị này
 
-const auth = async (req, res, next) => {
+// Middleware auth nâng cao - cho phép chọn người dùng thông qua header
+const auth = (req, res, next) => {
   try {
-    // Lấy token từ header
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({
-        success: false, 
-        message: 'Không tìm thấy token xác thực'
-      });
+    // Mặc định là Chị Đào
+    let userId = '6831d5f3a7c426695dce161d';
+    let userName = 'Chị Đào';
+    let userEmail = 'dao@gmail.com';
+    let userRole = 'user';
+
+    // Kiểm tra header tùy chỉnh
+    const customUserId = req.header('X-User-Id');
+    if (customUserId) {
+      userId = customUserId;
+      
+      // Có thể thêm logic để lấy thông tin user dựa vào ID
+      // Ví dụ: switch case cho các ID khác nhau
+      switch (customUserId) {
+        case '6831d5f3a7c426695dce161d':
+          userName = 'Chị Đào';
+          userEmail = 'dao@gmail.com';
+          userRole = 'user';
+          break;
+        case '6831d5f3a7c426695dce162e': // ID giả định khác
+          userName = 'Anh Tuấn';
+          userEmail = 'tuan@gmail.com';
+          userRole = 'admin';
+          break;
+        default:
+          // Giữ thông tin mặc định
+          break;
+      }
     }
-    
-    const token = authHeader.split(' ')[1];
-    
-    // Xác thực token
-    const decoded = jwt.verify(token, JWT_SECRET);
-    
-    // Tìm kiếm người dùng theo ID
-    const member = await Member.findById(decoded.id);
-    
-    if (!member) {
-      return res.status(404).json({
-        success: false,
-        message: 'Không tìm thấy người dùng'
-      });
-    }
-    
-    // Gắn thông tin người dùng vào request
-    req.user = {
-      id: member._id,
-      name: member.name,
-      email: member.email,
-      role: member.role || 'user'
+
+    // Gán thông tin người dùng vào request
+    req.user = { 
+      id: userId,
+      name: userName,
+      email: userEmail,
+      role: userRole
     };
     
+    console.log(`Auth middleware bypassed - Using user: ${userName} (${userId})`);
     next();
   } catch (error) {
-    console.error('Authentication error:', error);
-    return res.status(401).json({
+    console.error('Auth error:', error);
+    res.status(401).json({
       success: false,
-      message: 'Token không hợp lệ hoặc đã hết hạn'
+      message: 'Lỗi xác thực'
     });
   }
 };

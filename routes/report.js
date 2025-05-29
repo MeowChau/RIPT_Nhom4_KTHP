@@ -38,7 +38,93 @@ router.get('/summary', async (req, res) => {
   }
 });
 
-// ... existing code ...
+router.get('/members-by-gym', async (req, res) => {
+  try {
+    const membersByGym = await Member.aggregate([
+      { $group: { _id: '$gymId', count: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: 'gyms',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'gym'
+        }
+      },
+      { $unwind: '$gym' },
+      {
+        $project: {
+          gymName: '$gym.name',
+          count: 1
+        }
+      }
+    ]);
+    
+    res.json(membersByGym);
+  } catch (error) {
+    console.error('Error in /members-by-gym:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// API lấy số lượng PT theo cơ sở
+router.get('/pts-by-gym', async (req, res) => {
+  try {
+    const ptsByGym = await PersonalTrainer.aggregate([
+      { $group: { _id: '$gymId', count: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: 'gyms',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'gym'
+        }
+      },
+      { $unwind: '$gym' },
+      {
+        $project: {
+          gymName: '$gym.name',
+          count: 1
+        }
+      }
+    ]);
+    
+    res.json(ptsByGym);
+  } catch (error) {
+    console.error('Error in /pts-by-gym:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// API lấy số lượng hội viên còn hoạt động theo cơ sở
+router.get('/active-members-by-gym', async (req, res) => {
+  try {
+    const now = new Date();
+    const activeMembersByGym = await Member.aggregate([
+      { $match: { endDate: { $gte: now } } }, // Lọc chỉ lấy hội viên còn hoạt động (endDate > ngày hiện tại)
+      { $group: { _id: '$gymId', activeCount: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: 'gyms',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'gym'
+        }
+      },
+      { $unwind: '$gym' },
+      {
+        $project: {
+          gymName: '$gym.name',
+          activeCount: 1
+        }
+      }
+    ]);
+    
+    res.json(activeMembersByGym);
+  } catch (error) {
+    console.error('Error in /active-members-by-gym:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 // API xuất báo cáo tổng quan dạng Excel
 router.get('/export-overview', async (req, res) => {

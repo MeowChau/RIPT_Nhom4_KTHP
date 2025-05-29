@@ -10,6 +10,8 @@ const reportRoutes = require('./routes/report');
 const authRoutes = require('./routes/auth');
 const exerciseRoutes = require('./routes/exercise');  
 const adminRoutes = require('./routes/admin');
+const aiRoutes = require('./routes/aiRoutes');
+
 const app = express();
 
 // Bổ sung đoạn này để tăng giới hạn payload JSON và URL encoded lên 20MB
@@ -37,6 +39,7 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/auth', authRoutes); // Giữ lại dòng này
 app.use('/api/exercises', exerciseRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/ai', aiRoutes);
 // Xóa dòng trùng lặp: app.use('/api/auth', authRoutes);
 
 module.exports = app;
