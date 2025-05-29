@@ -79,6 +79,14 @@ export default [
   		hideInMenu: true,
   		wrappers: ['@/wrappers/auth'],
 		},
+		 {
+  		path: '/user/AI',
+		name: 'AI tư vấn',
+ 		component: './AI/index',
+  		// Thêm dòng này nếu không muốn hiển thị trên menu
+  		wrappers: ['@/wrappers/auth'],
+		access: 'canSeeAIPage',
+		},
         {
             path: '/user',
             redirect: '/user/login',

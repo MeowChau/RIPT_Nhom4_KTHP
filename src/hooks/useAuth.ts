@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { message } from 'antd';
 import { history } from 'umi';
 import { login, register, logout, getCurrentUser } from '@/services/Auth/index';
-import type API from '@/services/Auth/typings'; // Import namespace API
+import type API from '@/services/Auth/typings';
 
 export interface UseAuthResult {
   currentUser: API.UserInfo | null;
@@ -14,58 +14,56 @@ export interface UseAuthResult {
   fetchCurrentUser: () => Promise<API.UserInfo | null>;
 }
 
-
 export default function useAuth(): UseAuthResult {
   const [currentUser, setCurrentUser] = useState<API.UserInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem('token'));
 
- const handleLogin = useCallback(async (params: API.LoginParams): Promise<boolean> => {
-  try {
-    setLoading(true);
-    const response = await login(params);
-    
-    // Kiểm tra cả success và data để đảm bảo response hợp lệ
-    if (response.success && response.token) {
-      // Lưu token để sử dụng sau này
-      localStorage.setItem('token', response.token);
-      setIsLoggedIn(true);
+  const handleLogin = useCallback(async (params: API.LoginParams): Promise<boolean> => {
+    try {
+      setLoading(true);
+      const response = await login(params);
       
-      // Lưu thông tin người dùng từ response
-      if (response.data) {
-        setCurrentUser(response.data);
+      if (response.success && response.token) {
+        // Lưu token vào localStorage
+        localStorage.setItem('token', response.token);
+        setIsLoggedIn(true);
+        
+        // Lưu thông tin người dùng từ response
+        if (response.data) {
+          setCurrentUser(response.data);
+        }
+        
+        message.success('Đăng nhập thành công!');
+        return true;
+      } else {
+        message.error(response.message || 'Đăng nhập thất bại!');
+        return false;
       }
-      
-      message.success('Đăng nhập thành công!');
-      return true;
-    } else {
-      message.error(response.message || 'Đăng nhập thất bại!');
+    } catch (error) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'response' in error &&
+        typeof (error as any).response?.clone === 'function'
+      ) {
+        try {
+          const errorData = await (error as any).response.clone().json();
+          message.error(errorData.message || 'Đăng nhập thất bại!');
+        } catch {
+          message.error('Đã xảy ra lỗi khi đăng nhập!');
+        }
+      } else {
+        message.error('Không thể kết nối đến server!');
+      }
+      console.error('Lỗi đăng nhập:', error);
       return false;
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    if (
-      typeof error === 'object' &&
-      error !== null &&
-      'response' in error &&
-      typeof (error as any).response?.clone === 'function'
-    ) {
-      // Cố gắng trích xuất thông báo lỗi từ response
-      try {
-        const errorData = await (error as any).response.clone().json();
-        message.error(errorData.message || 'Đăng nhập thất bại!');
-      } catch {
-        message.error('Đã xảy ra lỗi khi đăng nhập!');
-      }
-    } else {
-      message.error('Không thể kết nối đến server!');
-    }
-    console.error('Lỗi đăng nhập:', error);
-    return false;
-  } finally {
-    setLoading(false);
-  }
-}, []);
+  }, []);
 
+  // handleRegister không thay đổi
   const handleRegister = useCallback(async (params: API.RegisterParams): Promise<boolean> => {
     try {
       setLoading(true);
@@ -91,7 +89,10 @@ export default function useAuth(): UseAuthResult {
     try {
       setLoading(true);
       await logout();
+      
+      // Xóa token
       localStorage.removeItem('token');
+      
       setCurrentUser(null);
       setIsLoggedIn(false);
       message.success('Đăng xuất thành công!');

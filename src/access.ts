@@ -25,6 +25,7 @@ export default function access(initialState: IInitialState) {
         canSeeProfilePage: isLoggedIn,      // Chỉ hiển thị khi đã đăng nhập
         canSeeTDEEPage: isLoggedIn,
 		canSeeForumPage: isLoggedIn,
+        canSeeAIPage: isLoggedIn,
         // Các quyền cũ đã bị comment out
         // canBoQLKH: token && vaiTro && vaiTro === 'can_bo_qlkh',
         // lanhDao: token && vaiTro && vaiTro === 'lanh_dao',
