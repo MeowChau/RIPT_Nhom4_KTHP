@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, message, Popconfirm, Typography, Card, Tag } from 'antd';
+import { Table, Button, message, Popconfirm, Typography, Card, Tag, Avatar } from 'antd';
 import { Link } from 'umi';
 import { queryPTs, deletePT } from '@/services/personalTrainer';
+import { UserOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography;
 
@@ -25,10 +26,6 @@ const PersonalTrainersPage: React.FC = () => {
   const [pts, setPTs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchPTs();
-  }, []);
-
   const fetchPTs = async () => {
     setLoading(true);
     try {
@@ -41,6 +38,10 @@ const PersonalTrainersPage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    fetchPTs();
+  }, []);
+
   const handleDelete = async (id: string) => {
     try {
       await deletePT(id);
@@ -52,6 +53,20 @@ const PersonalTrainersPage: React.FC = () => {
   };
 
   const columns = [
+    { 
+      title: 'Ảnh', 
+      dataIndex: 'image', 
+      key: 'image',
+      width: 80,
+      render: (image: string) => (
+        <Avatar 
+          size={64} 
+          src={image || undefined} 
+          icon={!image && <UserOutlined />} 
+          style={{ border: '1px solid #f0f0f0' }}
+        />
+      ),
+    },
     { title: 'Tên PT', dataIndex: 'name', key: 'name' },
     {
       title: 'Cơ sở',
@@ -61,9 +76,9 @@ const PersonalTrainersPage: React.FC = () => {
     },
     {
       title: 'Mô tả',
-      dataIndex: 'description', // Cột mô tả
+      dataIndex: 'description', 
       key: 'description',
-      render: (text: string) => <Text>{text || 'Chưa có mô tả'}</Text>, // Hiển thị mô tả
+      render: (text: string) => <Text>{text || 'Chưa có mô tả'}</Text>,
     },
     {
       title: 'Lịch làm việc',

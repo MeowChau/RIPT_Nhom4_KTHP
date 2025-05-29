@@ -16,7 +16,7 @@
 
   // Trang quản lý Hội viên (Members)
   {
-    name: 'Member',
+    name: 'Hội viên',
     path: '/members',
     icon: 'team',
     component: './members/index',
