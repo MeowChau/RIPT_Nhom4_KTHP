@@ -35,16 +35,21 @@ declare namespace API {
   /**
    * Thông tin chi tiết của một cơ sở gym
    */
-  interface GymFacility {
-    _id: string;                // MongoDB ObjectId
-    name: string;               // Tên cơ sở
-    address: string;            // Địa chỉ
-    area: number;               // Diện tích (m²)
-    image?: string;             // URL hình ảnh
-    workingHours: WorkingHours; // Giờ hoạt động
-    equipment: Equipment[];     // Danh sách thiết bị
-    createdAt?: string;         // Ngày tạo, định dạng ISO
-    updatedAt?: string;         // Ngày cập nhật, định dạng ISO
+   interface GymFacility {
+    _id: string;
+    name: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    description?: string;
+    openTime?: string;
+    closeTime?: string;
+    status?: 'active' | 'inactive';
+  }
+   interface GymResponse {
+    success: boolean;
+    data: GymFacility[];
+    message?: string;
   }
 
   /**

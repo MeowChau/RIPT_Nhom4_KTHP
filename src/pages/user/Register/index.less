@@ -1,13 +1,63 @@
 .container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f0f2f5;
+  padding: 24px;
 }
 
 .card {
   width: 100%;
-  max-width: 500px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 800px;
+}
+
+.steps {
+  margin-bottom: 24px;
+}
+
+.stepsContent {
+  min-height: 350px;
+  padding: 24px 0;
+}
+
+.paymentPlans {
+  margin: 20px 0;
+}
+
+.planCard {
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.selectedPlan {
+  border: 2px solid #1890ff;
+  position: relative;
+}
+
+.selectedMark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #1890ff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paymentStatus {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.login {
+  text-align: center;
+  margin-top: 16px;
 }

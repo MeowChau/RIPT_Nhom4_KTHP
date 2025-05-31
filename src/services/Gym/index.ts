@@ -1,7 +1,6 @@
 import { request } from 'umi';
 import type API from '@/services/Gym/typings';
 const API_URL = process.env.UMI_APP_API_URL || '';
-
 /**
  * Lấy danh sách tất cả các cơ sở gym
  */

@@ -1,43 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Select, DatePicker } from 'antd';
+import { Form, Input, Select, DatePicker, Button } from 'antd';
 import { UserOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Link } from 'umi';
 import moment from 'moment';
-import { getGymFacilities } from '@/services/Gym'; // Import service để lấy danh sách gym
-import type API from '@/services/Auth/typings';
+import { getGymFacilities } from '@/services/Gym';
 import styles from '../index.less';
 
 const { Option } = Select;
 
-const RegisterForm: React.FC<API.RegisterFormProps> = ({ onFinish, loading }) => {
+interface RegisterFormProps {
+  onFinish: (values: any) => void;
+  loading: boolean;
+}
+
+const RegisterForm: React.FC<RegisterFormProps> = ({ onFinish, loading }) => {
   const [form] = Form.useForm();
   const [gyms, setGyms] = useState<any[]>([]);
+  const [loadingGyms, setLoadingGyms] = useState(false);
 
-  // Lấy danh sách cơ sở gym khi component được render
-useEffect(() => {
-  const fetchGyms = async () => {
-    try {
-      const response: any = await getGymFacilities();
-      // Kiểm tra cấu trúc response và đặt state gyms
-      if (Array.isArray(response)) {
-        setGyms(response);
-      } else if (response && Array.isArray((response as any).data)) {
-        setGyms((response as any).data);
-      } else {
-        console.error('Định dạng dữ liệu gym không hợp lệ:', response);
+  // Lấy danh sách cơ sở gym
+  useEffect(() => {
+    const fetchGyms = async () => {
+      try {
+        setLoadingGyms(true);
+        const response: any = await getGymFacilities();
+        console.log('API gym response:', response);
+        
+        if (Array.isArray(response)) {
+          setGyms(response);
+        } else if (response && Array.isArray(response.data)) {
+          setGyms(response.data);
+        } else {
+          console.error('Định dạng dữ liệu gym không hợp lệ:', response);
+          setGyms([]);
+        }
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách gym:', error);
         setGyms([]);
+      } finally {
+        setLoadingGyms(false);
       }
-    } catch (error) {
-      console.error('Lỗi khi lấy danh sách gym:', error);
-      setGyms([]);
-    }
-  };
+    };
 
-  fetchGyms();
-}, []);
-
-  // Các gói tập theo yêu cầu backend
-  const membershipPackages = ['1 tháng', '3 tháng', '6 tháng', '12 tháng'];
+    fetchGyms();
+  }, []);
 
   return (
     <Form
@@ -95,21 +101,9 @@ useEffect(() => {
         label="Cơ sở gym"
         rules={[{ required: true, message: 'Vui lòng chọn cơ sở gym!' }]}
       >
-        <Select placeholder="Chọn cơ sở gym" size="large">
+        <Select placeholder="Chọn cơ sở gym" size="large" loading={loadingGyms}>
           {gyms.map(gym => (
             <Option key={gym._id} value={gym._id}>{gym.name}</Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        name="membershipPackage"
-        label="Gói tập"
-        rules={[{ required: true, message: 'Vui lòng chọn gói tập!' }]}
-      >
-        <Select placeholder="Chọn gói tập" size="large">
-          {membershipPackages.map(pkg => (
-            <Option key={pkg} value={pkg}>{pkg}</Option>
           ))}
         </Select>
       </Form.Item>
@@ -134,7 +128,7 @@ useEffect(() => {
           size="large"
           loading={loading}
         >
-          Đăng ký
+          Tiếp tục
         </Button>
       </Form.Item>
 
