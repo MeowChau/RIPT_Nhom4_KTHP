@@ -11,7 +11,7 @@ const authRoutes = require('./routes/auth');
 const exerciseRoutes = require('./routes/exercise');  
 const adminRoutes = require('./routes/admin');
 const aiRoutes = require('./routes/aiRoutes');
-
+const PaymentController = require('./controllers/PaymentController');
 const app = express();
 
 // Bổ sung đoạn này để tăng giới hạn payload JSON và URL encoded lên 20MB
@@ -41,5 +41,6 @@ app.use('/api/exercises', exerciseRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
 // Xóa dòng trùng lặp: app.use('/api/auth', authRoutes);
-
+// Thêm route nhận IPN từ MoMo
+app.post('/api/payment/notify', PaymentController.handlePaymentNotification);
 module.exports = app;
