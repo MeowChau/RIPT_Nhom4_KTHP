@@ -19,7 +19,12 @@ app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ limit: '20mb', extended: true }));
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://nhom4gym1.netlify.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+}));
+
 app.use(bodyParser.json());
 
 // Connect to MongoDB
@@ -40,7 +45,5 @@ app.use('/api/auth', authRoutes); // Giữ lại dòng này
 app.use('/api/exercises', exerciseRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
-// Xóa dòng trùng lặp: app.use('/api/auth', authRoutes);
-// Thêm route nhận IPN từ MoMo
 app.post('/api/payment/notify', PaymentController.handlePaymentNotification);
 module.exports = app;
