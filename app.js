@@ -19,11 +19,7 @@ app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ limit: '20mb', extended: true }));
 
 // Middleware
-app.use(cors({
-  origin: 'https://nhom4gym3.netlify.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true,
-}));
+app.use(cors());
 
 app.use(bodyParser.json());
 
