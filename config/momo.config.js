@@ -1,37 +1,25 @@
 module.exports = {
-  partnerCode: 'MOMONPMB20210629',
-  partnerName: 'Tên doanh nghiệp SDK4ME',
-  accessKey: 'Q2XhhSdgpKUlQ4Ky',
-  secretKey: 'k6B53GQKSjktZGJBK2MyrDa7w9S6RyCf',
+  // Thông tin tài khoản MoMo test
+  partnerCode: 'MOMONPMB20210629',  // Thay bằng thông tin tài khoản test được cung cấp
+  partnerName: 'Gym Management System',
+  storeId: 'MOMONPMB20210629_store',
+  accessKey: 'F8BBA842ECF85', // Thay bằng accessKey được cấp
+  secretKey: 'K951B6PE1waDMi640xX08PD3vg6EkVlz', // Thay bằng secretKey được cấp
+  
+  // API endpoints
   endpoint: 'https://test-payment.momo.vn/v2/gateway/api',
-  ipnUrl: 'https://your-domain.com/api/payment/notify', // Cần thay thế bằng domain thực
-  redirectUrl: 'https://your-domain.com/payment/result', // Cần thay thế bằng domain thực
+  ipnUrl: 'https://your-domain.com/api/payment/notify', // Cần thay bằng domain thật khi lên production
+  redirectUrl: 'http://localhost:8000/payment-result',
+  
+  // Các thông số giao dịch
   requestType: 'captureWallet',
   lang: 'vi',
+  
+  // Danh sách gói thanh toán
   paymentPlans: [
-    {
-      id: 'plan_1m',
-      name: 'Gói 1 tháng',
-      duration: 1,
-      price: 500
-    },
-    {
-      id: 'plan_3m',
-      name: 'Gói 3 tháng',
-      duration: 3,
-      price: 1000
-    },
-    {
-      id: 'plan_6m',
-      name: 'Gói 6 tháng',
-      duration: 6,
-      price: 1500
-    },
-    {
-      id: 'plan_12m',
-      name: 'Gói 12 tháng',
-      duration: 12,
-      price: 2000
-    }
+    { id: "basic", name: "Gói 1 tháng", price: 300000, duration: 1 },
+    { id: "standard", name: "Gói 3 tháng", price: 750000, duration: 3 },
+    { id: "premium", name: "Gói 6 tháng", price: 1350000, duration: 6 },
+    { id: "yearly", name: "Gói 12 tháng", price: 2400000, duration: 12 }
   ]
 };

@@ -1,17 +1,46 @@
 const mongoose = require('mongoose');
 
-const PaymentSchema = new mongoose.Schema({
-  memberId: { type: mongoose.Schema.Types.ObjectId, ref: 'Member', required: true },
-  gymId: { type: mongoose.Schema.Types.ObjectId, ref: 'Gym', required: true },
-  package: { type: String, required: true },
-  amount: { type: Number, required: true },
-  rent: { type: Number, default: 0 }, // Chi phí mặt bằng
-  salaries: { type: Number, default: 0 }, // Chi phí lương nhân viên
-  maintenance: { type: Number, default: 0 }, // Chi phí bảo trì
-  marketing: { type: Number, default: 0 }, // Chi phí marketing
-  
-  date: { type: Date, required: true, default: Date.now },
-  status: { type: String, enum: ['success', 'failed', 'pending'], required: true }
+const paymentSchema = new mongoose.Schema({
+  orderId: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  userId: {
+    type: String,
+    default: null
+  },
+  planId: {
+    type: String,
+    required: true
+  },
+  amount: {
+    type: Number,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'completed', 'failed', 'refunded'],
+    default: 'pending'
+  },
+  transId: {
+    type: String,
+    default: null
+  },
+  paymentInfo: {
+    type: Object,
+    default: {}
+  },
+  paymentTime: {
+    type: Date,
+    default: null
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-module.exports = mongoose.model('Payment', PaymentSchema);
+const Payment = mongoose.model('Payment', paymentSchema);
+
+module.exports = Payment;

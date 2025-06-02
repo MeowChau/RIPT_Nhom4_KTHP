@@ -8,6 +8,138 @@ const { JWT_SECRET } = require('../config/keys'); // Import JWT_SECRET từ file
 // Log thông tin JWT_SECRET để debug (chỉ phần đầu)
 console.log('Đang sử dụng JWT_SECRET', JWT_SECRET ? JWT_SECRET.substring(0, 3) + '...' : 'undefined');
 
+// Đăng ký tài khoản mới
+router.post('/register', async (req, res) => {
+  try {
+    const { name, email, phone } = req.body;
+    
+    console.log('Đang xử lý đăng ký cho:', email);
+    
+    // Kiểm tra dữ liệu đầu vào
+    if (!email || !phone) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email và số điện thoại là bắt buộc' 
+      });
+    }
+    
+    // Kiểm tra email đã tồn tại chưa
+    const existingMember = await Member.findOne({ email });
+    if (existingMember) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email này đã được sử dụng' 
+      });
+    }
+    
+    // Sử dụng số điện thoại làm mật khẩu ban đầu
+    const password = phone;
+    
+    // Tạo mật khẩu hash
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    
+    // Tạo member mới
+    const newMember = new Member({
+      name: name || email.split('@')[0],
+      email,
+      password: hashedPassword,
+      phone,
+      role: 'user',
+      createdAt: new Date()
+    });
+    
+    // Lưu vào database
+    await newMember.save();
+    
+    // Tạo JWT token
+    const payload = { 
+      id: newMember._id,
+      role: 'user'
+    };
+    
+    const token = jwt.sign(
+      payload,
+      JWT_SECRET,
+      { expiresIn: '1y' }
+    );
+    
+    console.log('Register successful for:', newMember.email);
+    console.log('User created with ID:', newMember._id);
+    
+    // Trả về kết quả
+    res.status(201).json({
+      success: true,
+      token,
+      data: {
+        id: newMember._id,
+        name: newMember.name,
+        email: newMember.email,
+        role: 'user',
+        phone: newMember.phone
+      },
+      message: 'Đăng ký thành công! Mật khẩu đăng nhập là số điện thoại của bạn.'
+    });
+    
+  } catch (error) {
+    console.error('Register error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Lỗi server khi đăng ký' 
+    });
+  }
+});
+
+// Đổi mật khẩu
+router.post('/change-password', async (req, res) => {
+  try {
+    const { email, currentPassword, newPassword } = req.body;
+    
+    if (!email || !currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email, mật khẩu hiện tại và mật khẩu mới đều là bắt buộc'
+      });
+    }
+    
+    // Tìm user
+    const member = await Member.findOne({ email });
+    if (!member) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email không tồn tại' 
+      });
+    }
+    
+    // Kiểm tra mật khẩu hiện tại
+    const isMatch = await bcrypt.compare(currentPassword, member.password);
+    if (!isMatch) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Mật khẩu hiện tại không đúng' 
+      });
+    }
+    
+    // Hash mật khẩu mới
+    const salt = await bcrypt.genSalt(10);
+    member.password = await bcrypt.hash(newPassword, salt);
+    
+    // Lưu vào database
+    await member.save();
+    
+    res.json({
+      success: true,
+      message: 'Đổi mật khẩu thành công'
+    });
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Lỗi server khi đổi mật khẩu' 
+    });
+  }
+});
+
 // Đăng nhập
 router.post('/login', async (req, res) => {
   try {
@@ -52,6 +184,7 @@ router.post('/login', async (req, res) => {
         name: member.name,
         email: member.email,
         role: member.role || 'user', // Đảm bảo có role
+        phone: member.phone
         // Các thông tin khác
       },
       role: member.role || 'user', // Thêm role ở top-level để dễ truy cập
@@ -60,6 +193,55 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ success: false, message: 'Lỗi server' });
+  }
+});
+
+// Quên mật khẩu (reset về số điện thoại)
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email là bắt buộc'
+      });
+    }
+    
+    // Tìm user
+    const member = await Member.findOne({ email });
+    if (!member) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email không tồn tại' 
+      });
+    }
+    
+    // Reset mật khẩu về số điện thoại
+    if (!member.phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Không tìm thấy số điện thoại để đặt lại mật khẩu'
+      });
+    }
+    
+    // Hash mật khẩu mới (số điện thoại)
+    const salt = await bcrypt.genSalt(10);
+    member.password = await bcrypt.hash(member.phone, salt);
+    
+    // Lưu vào database
+    await member.save();
+    
+    res.json({
+      success: true,
+      message: 'Đặt lại mật khẩu thành công. Mật khẩu mới là số điện thoại của bạn.'
+    });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Lỗi server khi đặt lại mật khẩu' 
+    });
   }
 });
 

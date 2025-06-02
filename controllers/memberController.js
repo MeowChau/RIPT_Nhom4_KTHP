@@ -166,4 +166,78 @@ exports.deleteMember = async (req, res) => {
     console.error('Error deleting member:', error);
     res.status(500).json({ message: 'Lỗi server' });
   }
+  
+};
+
+// Thêm hàm register cho API đăng ký thành viên sau khi thanh toán
+exports.register = async (req, res) => {
+  try {
+    const { name, email, phone, gymId, startDate, orderId } = req.body;
+    
+    // Lấy thông tin thanh toán từ middleware hoặc kiểm tra trực tiếp
+    const payment = req.payment || { duration: 1 }; // Fallback nếu không có middleware
+    
+    // Kiểm tra email hoặc phone trùng
+    const isDuplicate = await checkDuplicateEmailPhone(email, phone);
+    if (isDuplicate) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Email hoặc số điện thoại đã tồn tại' 
+      });
+    }
+
+    // Xác định gói tập dựa trên thông tin thanh toán 
+    let membershipPackage = '1 tháng'; // Mặc định
+    
+    // Map duration từ payment sang tên gói
+    switch (payment.duration) {
+      case 3: membershipPackage = '3 tháng'; break;
+      case 6: membershipPackage = '6 tháng'; break;
+      case 12: membershipPackage = '12 tháng'; break;
+      default: membershipPackage = '1 tháng';
+    }
+    
+    // Tính ngày kết thúc gói tập
+    const endDate = calculateEndDate(startDate, membershipPackage);
+    
+    // Hash password (mặc định là số điện thoại)
+    const hashedPassword = await bcrypt.hash(phone, 10);
+
+    const member = new Member({
+      name,
+      email,
+      phone,
+      password: hashedPassword,
+      gymId,
+      startDate: new Date(startDate),
+      endDate,
+      membershipPackage,
+      orderId,
+      status: 'active'
+    });
+
+    const savedMember = await member.save();
+    
+    res.status(201).json({
+      success: true,
+      message: 'Đăng ký thành viên thành công',
+      member: {
+        _id: savedMember._id,
+        name: savedMember.name,
+        email: savedMember.email,
+        phone: savedMember.phone,
+        gymId: savedMember.gymId,
+        membershipPackage: savedMember.membershipPackage,
+        startDate: savedMember.startDate,
+        endDate: savedMember.endDate
+      }
+    });
+  } catch (error) {
+    console.error('Error registering member:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Lỗi server khi đăng ký thành viên',
+      error: error.message 
+    });
+  }
 };
