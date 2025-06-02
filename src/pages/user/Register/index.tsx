@@ -1,142 +1,207 @@
-import React, { useState } from 'react';
-import { Card, Steps } from 'antd';
-import { history } from 'umi';
+import React, { useEffect, useState } from 'react';
+import { Card, Typography, Spin, Result, Button, message } from 'antd';
+import { history, useModel } from 'umi';
+import { register, login } from '@/services/Auth';
 import RegisterForm from '@/pages/user/Register/components/ResgisterForm';
-import PaymentPlans from './components/PaymentPlans';
-import PaymentStatus from './components/PaymentStatus';
-import RegisterResult from './components/RegisterResult';
-import { register } from '@/services/Auth';
-import moment from 'moment';
 import styles from './index.less';
 
-const { Step } = Steps;
-
-// Định nghĩa các bước đăng ký
-enum RegisterStep {
-  FORM = 0,
-  PAYMENT_PLAN = 1,
-  PAYMENT_STATUS = 2,
-  RESULT = 3
-}
+const { Title, Paragraph } = Typography;
 
 const RegisterPage: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<RegisterStep>(RegisterStep.FORM);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [userInfo, setUserInfo] = useState<any>(null);
-  const [selectedPlanId, setSelectedPlanId] = useState<string>('');
-  const [paymentUrl, setPaymentUrl] = useState<string>('');
-  const [orderId, setOrderId] = useState<string>('');
-  // Removed unused state variable: paymentStatus
+  // Sử dụng model user để truy cập loading state
+  const { loading } = useModel('user');
+  
+  // State cho trang
+  // State cho trang
+  const [registerSuccess, setRegisterSuccess] = useState<boolean>(false);
+  const [registeredUser, setRegisteredUser] = useState<any>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  // State cho phòng tập
+  const [gymList, setGymList] = useState<any[]>([]);
+  const [loadingGyms, setLoadingGyms] = useState<boolean>(false);
 
-  // Xử lý khi nhận thông tin đăng ký từ form
-  const handleInfoSubmit = (values: any) => {
-    setUserInfo(values);
-    setCurrentStep(RegisterStep.PAYMENT_PLAN);
-  };
-
-  // Xử lý khi nhận thông tin gói thanh toán đã chọn
-  const handlePlanSelected = (planId: string, paymentData: any) => {
-    setSelectedPlanId(planId);
-    setPaymentUrl(paymentData.paymentUrl);
-    setOrderId(paymentData.orderId);
-    setCurrentStep(RegisterStep.PAYMENT_STATUS);
-  };
-
-  // Hoàn tất đăng ký - ĐỊNH NGHĨA TRƯỚC KHI SỬ DỤNG
-  const completeRegistration = async () => {
-    if (!userInfo || !orderId) return;
-
-    try {
-      setLoading(true);
-      
-      const formattedStartDate = userInfo.startDate 
-        ? moment(userInfo.startDate).format('YYYY-MM-DD') 
-        : moment().format('YYYY-MM-DD');
-      
-      const registerData = {
-        ...userInfo,
-        orderId,
-        planId: selectedPlanId,
-        startDate: formattedStartDate,
-      };
-      
-      // Gọi API đăng ký
-      const response = await register(registerData);
-      
-      if (response.success) {
-        setCurrentStep(RegisterStep.RESULT);
-      } else {
-        // Xử lý lỗi đăng ký
-        console.error('Đăng ký thất bại:', response.message);
+  // Fetch danh sách phòng tập khi component mount
+  useEffect(() => {
+    const fetchGyms = async () => {
+      setLoadingGyms(true);
+      try {
+        // Thay đổi URL API tùy theo backend của bạn
+        const response = await fetch('/api/gyms');
+        const data = await response.json();
+        
+        if (Array.isArray(data)) {
+          setGymList(data);
+        } else if (data && Array.isArray(data.data)) {
+          setGymList(data.data);
+        }
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách phòng tập:', error);
+        message.error('Không thể tải danh sách phòng tập');
+      } finally {
+        setLoadingGyms(false);
       }
-    } catch (error) {
-      console.error('Lỗi hoàn tất đăng ký:', error);
-    } finally {
-      setLoading(false);
+    };
+
+    fetchGyms();
+  }, []);
+
+  // Handler đăng ký
+  const handleRegister = async (values: any) => {
+    try {
+      setErrorMessage(null);
+      
+      // Đảm bảo có startDate
+      if (!values.startDate) {
+        values.startDate = new Date().toISOString().split('T')[0];
+      }
+      
+      // Đảm bảo có membershipPackage
+      if (!values.membershipPackage) {
+        values.membershipPackage = '1 tháng';
+      }
+      
+      // Sử dụng số điện thoại làm mật khẩu
+      values.password = values.phone;
+      
+      // Lưu thông tin đăng ký để hiển thị
+      setRegisteredUser({
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        membershipPackage: values.membershipPackage,
+        startDate: values.startDate
+      });
+      
+      // Gọi hàm register từ useAuth model
+      const success = await register(values);
+      
+      if (success) {
+        message.success('Đăng ký thành công!');
+        setRegisterSuccess(true);
+        
+        // Không tự động redirect đến trang đăng nhập
+        // Người dùng sẽ click nút để đăng nhập
+      } else {
+        message.error('Đăng ký không thành công. Vui lòng thử lại.');
+      }
+    } catch (error: any) {
+      console.error('Lỗi khi đăng ký:', error);
+      
+      // Xử lý lỗi
+      if (error.response && error.response.data && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+        message.error(error.response.data.message);
+      } else {
+        setErrorMessage('Đăng ký không thành công. Vui lòng thử lại!');
+        message.error('Đăng ký không thành công. Vui lòng thử lại!');
+      }
     }
   };
 
-  // Xử lý khi nhận trạng thái thanh toán - SỬ DỤNG SAU KHI ĐÃ ĐỊNH NGHĨA
-  const handlePaymentStatusChange = (status: 'pending' | 'completed' | 'failed') => {
-    // Nếu thanh toán thành công, tiến hành đăng ký tài khoản
-    if (status === 'completed') {
-      completeRegistration();
+  // Xử lý đăng nhập trực tiếp sau khi đăng ký thành công
+  const handleDirectLogin = async () => {
+    if (!registeredUser) return;
+    
+    try {
+      message.loading('Đang đăng nhập...', 1);
+      
+      // Sử dụng thông tin đăng ký để đăng nhập
+      const loginSuccess = await login({
+        email: registeredUser.email,
+        password: registeredUser.phone // Mật khẩu mặc định là số điện thoại
+      });
+      
+      if (loginSuccess) {
+        message.success('Đăng nhập thành công!');
+        history.push('user/login'); // Chuyển hướng đến trang dashboard sau khi đăng nhập
+      } else {
+        message.error('Đăng nhập không thành công. Vui lòng thử lại ở trang đăng nhập.');
+        history.push('/user/login'); // Đường dẫn đã sửa thành /user/login
+      }
+    } catch (error: any) {
+      console.error('Lỗi khi đăng nhập:', error);
+      message.error('Đăng nhập không thành công. Vui lòng thử lại ở trang đăng nhập.');
+      history.push('/user/login'); // Đường dẫn đã sửa thành /user/login
     }
   };
 
-  // Xử lý quay lại bước trước
-  const handleGoBack = () => {
-    if (currentStep > 0) {
-      setCurrentStep(prevStep => (prevStep - 1) as RegisterStep);
-    }
-  };
-
-  // Nội dung các bước
-  const steps = [
-    {
-      title: 'Thông tin',
-      content: <RegisterForm onFinish={handleInfoSubmit} loading={loading} />,
-    },
-    {
-      title: 'Chọn gói',
-      content: (
-        <PaymentPlans 
-          onSelect={handlePlanSelected}
-          onBack={handleGoBack}
-          loading={loading}
-        />
-      ),
-    },
-    {
-      title: 'Thanh toán',
-      content: (
-        <PaymentStatus
-          paymentUrl={paymentUrl}
-          orderId={orderId}
-          onStatusChange={handlePaymentStatusChange}
-          onBack={() => setCurrentStep(RegisterStep.PAYMENT_PLAN)}
-          loading={loading}
-        />
-      ),
-    },
-    {
-      title: 'Hoàn tất',
-      content: <RegisterResult onLogin={() => history.push('/user/login')} />,
-    },
-  ];
+  // Hiển thị thông báo thành công
+  if (registerSuccess && registeredUser) {
+    return (
+      <div className={styles.registerPage}>
+        <div className={styles.registerContainer}>
+          <Card className={styles.registerCard}>
+            <Result
+              status="success"
+              title="Đăng ký thành công!"
+              subTitle={
+                <div>
+                  <p>Thông tin của bạn đã được lưu trong hệ thống.</p>
+                  <p>Bạn có thể đăng nhập ngay bằng email và mật khẩu (số điện thoại của bạn).</p>
+                </div>
+              }
+              extra={[
+                <Button
+                  type="primary"
+                  key="direct-login"
+                  onClick={handleDirectLogin}
+                >
+                  Đăng nhập ngay
+                </Button>,
+                <Button
+                  key="login-page"
+                  onClick={() => history.push('/user/login')} // Đường dẫn đã sửa thành /user/login
+                >
+                  Đến trang đăng nhập
+                </Button>
+              ]}
+            />
+            
+            <div className={styles.registrationDetails}>
+              <Paragraph strong>Thông tin đăng ký:</Paragraph>
+              <ul className={styles.infoList}>
+                <li><strong>Họ tên:</strong> {registeredUser.name}</li>
+                <li><strong>Email:</strong> {registeredUser.email}</li>
+                <li><strong>Số điện thoại:</strong> {registeredUser.phone}</li>
+                <li><strong>Gói tập:</strong> {registeredUser.membershipPackage}</li>
+                <li><strong>Ngày bắt đầu:</strong> {new Date(registeredUser.startDate).toLocaleDateString('vi-VN')}</li>
+              </ul>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={styles.container}>
-      <Card title="Đăng ký hội viên" className={styles.card}>
-        <Steps current={currentStep} className={styles.steps}>
-          {steps.map(item => (
-            <Step key={item.title} title={item.title} />
-          ))}
-        </Steps>
-        <div className={styles.stepsContent}>
-          {steps[currentStep].content}
+    <div className={styles.registerPage}>
+      <div className={styles.registerContainer}>
+        <div className={styles.registerHeader}>
+          <Title level={2}>Đăng ký tài khoản</Title>
+          <Paragraph>Trở thành thành viên để được tập luyện tại phòng tập của chúng tôi</Paragraph>
         </div>
-      </Card>
+
+        <Card className={styles.registerCard}>
+          {loadingGyms ? (
+            <div className={styles.loadingContainer}>
+              <Spin size="large" />
+              <Paragraph className={styles.loadingText}>Đang tải dữ liệu...</Paragraph>
+            </div>
+          ) : (
+            <RegisterForm
+              onSubmit={handleRegister}
+              isLoading={loading}
+              error={errorMessage}
+              gymList={gymList}
+            />
+          )}
+        </Card>
+
+        <div className={styles.registerFooter}>
+          <p>© {new Date().getFullYear()} Fitness Center. Tất cả quyền được bảo lưu.</p>
+        </div>
+      </div>
     </div>
   );
 };

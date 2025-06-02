@@ -3,7 +3,7 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'umi';
 import styles from '../index.less';
-import API from '@/services/Auth/typings'; // Import namespace API làm default
+import type API from '@/services/Auth/typings'; // Import namespace API làm default
 
 // Thêm type API.LoginFormProps vào component
 const LoginForm: React.FC<API.LoginFormProps> = ({ onFinish, loading }) => {

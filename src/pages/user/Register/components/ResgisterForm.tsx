@@ -1,141 +1,235 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Input, Select, DatePicker, Button } from 'antd';
-import { UserOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
-import { Link } from 'umi';
+import React from 'react';
+import { Form, Input, Button, Alert, Select, Typography, DatePicker } from 'antd';
+import { MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import { history } from 'umi';
 import moment from 'moment';
-import { getGymFacilities } from '@/services/Gym';
-import styles from '../index.less';
+import styles from './RegisterForm.less';
 
 const { Option } = Select;
+const { Text, Link: AntLink } = Typography;
 
-interface RegisterFormProps {
-  onFinish: (values: any) => void;
-  loading: boolean;
+// Định nghĩa interface
+interface Gym {
+  _id?: string;
+  id?: string;
+  name: string;
+  address?: string;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ onFinish, loading }) => {
+interface RegisterFormProps {
+  onSubmit: (values: any) => void;
+  isLoading: boolean;
+  error?: string | null;
+  gymList: Gym[];
+}
+
+const RegisterForm: React.FC<RegisterFormProps> = ({ 
+  onSubmit, 
+  isLoading, 
+  error,
+  gymList = [] 
+}) => {
   const [form] = Form.useForm();
-  const [gyms, setGyms] = useState<any[]>([]);
-  const [loadingGyms, setLoadingGyms] = useState(false);
 
-  // Lấy danh sách cơ sở gym
-  useEffect(() => {
-    const fetchGyms = async () => {
-      try {
-        setLoadingGyms(true);
-        const response: any = await getGymFacilities();
-        console.log('API gym response:', response);
-        
-        if (Array.isArray(response)) {
-          setGyms(response);
-        } else if (response && Array.isArray(response.data)) {
-          setGyms(response.data);
-        } else {
-          console.error('Định dạng dữ liệu gym không hợp lệ:', response);
-          setGyms([]);
-        }
-      } catch (error) {
-        console.error('Lỗi khi lấy danh sách gym:', error);
-        setGyms([]);
-      } finally {
-        setLoadingGyms(false);
-      }
-    };
+  // Hàm lấy ID phòng tập
+  const getGymId = (gym: Gym): string => {
+    return gym._id || gym.id || '';
+  };
 
-    fetchGyms();
-  }, []);
+  // Xử lý khi form submit
+  const onFinish = async (values: any) => {
+    // Chuyển đổi moment object thành string date
+    if (values.startDate && moment.isMoment(values.startDate)) {
+      values.startDate = values.startDate.format('YYYY-MM-DD');
+    }
+    
+    // Gọi hàm onSubmit từ props
+    onSubmit(values);
+  };
+
+  // Chỉ giữ lại validator cơ bản
+  const validateEmail = (_: any, value: string) => {
+    // Kiểm tra định dạng email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    if (!value) {
+      return Promise.reject(new Error('Vui lòng nhập email!'));
+    }
+    
+    if (!emailRegex.test(value)) {
+      return Promise.reject(new Error('Email không đúng định dạng!'));
+    }
+
+    return Promise.resolve();
+  };
+
+  const validatePhone = (_: any, value: string) => {
+    // Kiểm tra định dạng số điện thoại Việt Nam
+    const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
+    
+    if (!value) {
+      return Promise.reject(new Error('Vui lòng nhập số điện thoại!'));
+    }
+    
+    if (!phoneRegex.test(value)) {
+      return Promise.reject(new Error('Số điện thoại không đúng định dạng! (VD: 0912345678)'));
+    }
+
+    return Promise.resolve();
+  };
 
   return (
-    <Form
-      form={form}
-      name="register"
-      onFinish={onFinish}
-      layout="vertical"
-      scrollToFirstError
-      initialValues={{
-        startDate: moment(), // Mặc định ngày bắt đầu là hôm nay
-      }}
-    >
-      <Form.Item
-        name="name"
-        rules={[{ required: true, message: 'Vui lòng nhập tên hội viên!' }]}
-      >
-        <Input 
-          prefix={<UserOutlined />} 
-          placeholder="Tên hội viên" 
-          size="large"
+    <div className={styles.formContainer}>
+      {/* Hiển thị lỗi từ API (nếu có) */}
+      {error && (
+        <Alert
+          message="Lỗi đăng ký"
+          description={error}
+          type="error"
+          showIcon
+          className={styles.errorAlert}
         />
-      </Form.Item>
+      )}
 
-      <Form.Item
-        name="email"
-        rules={[
-          { required: true, message: 'Vui lòng nhập email!' },
-          { type: 'email', message: 'Email không hợp lệ!' }
-        ]}
+      <Form
+        form={form}
+        name="register"
+        layout="vertical"
+        onFinish={onFinish}
+        scrollToFirstError
+        requiredMark={false}
+        initialValues={{
+          membershipPackage: '1 tháng',
+          startDate: moment()
+        }}
       >
-        <Input 
-          prefix={<MailOutlined />} 
-          placeholder="Email" 
-          size="large" 
-        />
-      </Form.Item>
-
-      <Form.Item
-        name="phone"
-        rules={[
-          { required: true, message: 'Vui lòng nhập số điện thoại!' },
-          { pattern: /^[0-9]{10}$/, message: 'Số điện thoại không hợp lệ!' }
-        ]}
-        extra="Số điện thoại của bạn sẽ là mật khẩu mặc định"
-      >
-        <Input 
-          prefix={<PhoneOutlined />} 
-          placeholder="Số điện thoại" 
-          size="large" 
-        />
-      </Form.Item>
-
-      <Form.Item
-        name="gymId"
-        label="Cơ sở gym"
-        rules={[{ required: true, message: 'Vui lòng chọn cơ sở gym!' }]}
-      >
-        <Select placeholder="Chọn cơ sở gym" size="large" loading={loadingGyms}>
-          {gyms.map(gym => (
-            <Option key={gym._id} value={gym._id}>{gym.name}</Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        name="startDate"
-        label="Ngày bắt đầu"
-        rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}
-      >
-        <DatePicker 
-          style={{ width: '100%' }} 
-          format="YYYY-MM-DD" 
-          size="large"
-        />
-      </Form.Item>
-
-      <Form.Item>
-        <Button 
-          type="primary" 
-          htmlType="submit" 
-          block 
-          size="large"
-          loading={loading}
+        <Form.Item
+          name="name"
+          label="Họ tên"
+          rules={[
+            { required: true, message: 'Vui lòng nhập họ tên!' },
+            { min: 2, message: 'Họ tên phải có ít nhất 2 ký tự!' }
+          ]}
         >
-          Tiếp tục
-        </Button>
-      </Form.Item>
+          <Input 
+            prefix={<UserOutlined className={styles.inputIcon} />} 
+            placeholder="Nhập họ tên của bạn" 
+            size="large" 
+          />
+        </Form.Item>
+        
+        <Form.Item
+          name="email"
+          label="Email"
+          rules={[
+            { validator: validateEmail }
+          ]}
+        >
+          <Input 
+            prefix={<MailOutlined className={styles.inputIcon} />} 
+            placeholder="Nhập email của bạn" 
+            size="large"
+          />
+        </Form.Item>
+        
+        <Form.Item
+          name="phone"
+          label="Số điện thoại"
+          rules={[
+            { validator: validatePhone }
+          ]}
+        >
+          <Input 
+            prefix={<PhoneOutlined className={styles.inputIcon} />} 
+            placeholder="Nhập số điện thoại của bạn" 
+            size="large"
+          />
+        </Form.Item>
 
-      <div className={styles.login}>
-        Đã có tài khoản? <Link to="/user/login">Đăng nhập!</Link>
+        <Form.Item
+          name="gymId"
+          label="Phòng tập"
+          rules={gymList.length > 0 ? [
+            { required: true, message: 'Vui lòng chọn phòng tập!' }
+          ] : undefined}
+        >
+          {gymList.length > 0 ? (
+            <Select
+              placeholder="Chọn phòng tập bạn muốn tham gia"
+              size="large"
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                (option?.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+              }
+            >
+              {gymList.map(gym => (
+                <Option key={getGymId(gym)} value={getGymId(gym)}>
+                  {gym.name} {gym.address ? `- ${gym.address}` : ''}
+                </Option>
+              ))}
+            </Select>
+          ) : (
+            <Input 
+              placeholder="Không có phòng tập nào" 
+              disabled
+              size="large" 
+            />
+          )}
+        </Form.Item>
+
+        <Form.Item
+          name="membershipPackage"
+          label="Gói tập"
+          rules={[{ required: true, message: 'Vui lòng chọn gói tập!' }]}
+        >
+          <Select size="large">
+            <Option value="1 tháng">1 tháng</Option>
+            <Option value="3 tháng">3 tháng</Option>
+            <Option value="6 tháng">6 tháng</Option>
+            <Option value="12 tháng">12 tháng</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="startDate"
+          label="Ngày bắt đầu"
+          rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}
+        >
+          <DatePicker 
+            className={styles.datePicker}
+            format="DD/MM/YYYY"
+            size="large"
+            placeholder="Chọn ngày bắt đầu"
+          />
+        </Form.Item>
+
+        <div className={styles.registerNote}>
+          <Text type="secondary">
+            Lưu ý: Số điện thoại sẽ được sử dụng làm mật khẩu ban đầu của bạn.
+          </Text>
+        </div>
+        
+        <Form.Item>
+          <Button 
+            type="primary" 
+            htmlType="submit" 
+            className={styles.registerButton} 
+            loading={isLoading}
+            block
+            size="large"
+          >
+            Đăng ký
+          </Button>
+        </Form.Item>
+      </Form>
+      
+      <div className={styles.loginLink}>
+        <Text>
+          Đã có tài khoản? <AntLink onClick={() => history.push('/user/login')}>Đăng nhập ngay</AntLink>
+        </Text>
       </div>
-    </Form>
+    </div>
   );
 };
 
