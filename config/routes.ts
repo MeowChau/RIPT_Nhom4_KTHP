@@ -42,20 +42,30 @@
     ],
   },
 
-  // Menu quản lý thanh toán & gia hạn
-  {
-    name: 'Tài chính',
-    path: '/payments',
-    icon: 'credit-card',
+   {
+    name: 'Thư viện bài tập',
+    path: '/exercises',
+    icon: 'read',
     routes: [
       {
-        path: '/payments',
+        path: '/exercises',
         exact: true,
-        component: './payments/index',
+        component: './exercise/index',
       },
+      {
+        path: '/exercises/edit',
+        exact: true,
+        component: './exercise/edit',
+        hideInMenu: true,
+      },
+      {
+        path: '/exercises/detail',
+        exact: true,
+        component: './exercise/detail',
+        hideInMenu: true,
+      }
     ],
   },
-
   // Menu báo cáo & thống kê
 {
   name: 'Báo cáo',
@@ -63,12 +73,7 @@
   icon: 'pie-chart',
   component: './reports/index',
 },
-{
-  name: 'Thư viện',
-  path: '/library/',
-  icon: 'bulb',
-  component: './library/index',
-},
+
   // Các route thông báo
   {
     path: '/notification',
