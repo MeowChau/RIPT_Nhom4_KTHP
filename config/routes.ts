@@ -95,6 +95,14 @@ export default [
   		wrappers: ['@/wrappers/auth'],
 		access: 'canSeeAIPage',
 		},
+		 {
+  		path: '/user/Exercise',
+		name: 'Thư viện bài tập',
+ 		component: './Exercise/index',
+  		// Thêm dòng này nếu không muốn hiển thị trên menu
+  		wrappers: ['@/wrappers/auth'],
+		access: 'canSeeExercisePage',
+		},
         {
             path: '/user',
             redirect: '/user/login',

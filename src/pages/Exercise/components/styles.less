@@ -1,0 +1,324 @@
+// SearchBar styles
+.searchBarContainer {
+  padding: 24px 0;
+  background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%);
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.titleSection {
+  margin-bottom: 24px;
+  
+  h2 {
+    color: #fff;
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+  }
+  
+  p {
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+}
+
+.searchSection {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.searchControls {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.searchInput {
+  min-width: 300px;
+}
+
+// ExerciseCard styles
+.exerciseCard {
+  height: 100%; // Chiều cao 100% của container
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s;
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    
+    .cardOverlay {
+      opacity: 1;
+    }
+  }
+  
+  // Đảm bảo nội dung card có chiều cao cố định
+  :global(.ant-card-body) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 200px; // Chiều cao cố định cho phần nội dung
+  }
+  
+  // Tiêu đề card có chiều cao cố định
+  :global(.ant-card-meta-title) {
+    height: 50px;
+    overflow: hidden;
+    margin-bottom: 8px !important;
+    
+    h4 {
+      margin-bottom: 0;
+      font-size: 16px;
+      line-height: 1.4;
+      height: 44px; // Chiều cao cố định cho tiêu đề (2 dòng)
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+  
+  // Mô tả card có chiều cao cố định
+  :global(.ant-card-meta-description) {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.cardImageContainer {
+  position: relative;
+  height: 180px; // Chiều cao cố định cho hình ảnh
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.cardOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.playIcon {
+  font-size: 48px;
+  color: #fff;
+}
+
+.exerciseStats {
+  display: flex;
+  margin-top: auto; // Đẩy xuống dưới cùng
+  padding-top: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid #f0f0f0;
+}
+
+.statItem {
+  margin-right: 16px;
+  display: flex;
+  align-items: baseline;
+  
+  strong {
+    margin-right: 4px;
+    font-size: 1.1em;
+  }
+}
+
+// ExerciseList styles
+.listContainer {
+  padding: 0 8px;
+}
+
+.spinContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+}
+
+.emptyContainer {
+  padding: 60px 0;
+}
+
+// ExerciseDetail styles
+.detailModal {
+  :global(.ant-modal-content) {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+
+.modalHeader {
+  width: 100%;
+}
+
+.playerWrapper {
+  position: relative;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+}
+
+.reactPlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.modalContent {
+  padding: 24px;
+}
+
+.typeTag {
+  margin-top: -8px;
+  font-size: 14px;
+  padding: 4px 12px;
+}
+
+.frequencyInfo {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.frequencyItem {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.frequencyIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #f0f5ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 24px;
+  color: #1890ff;
+}
+
+.frequencyValue {
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.frequencyLabel {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.playButton {
+  font-size: 64px;
+  color: #fff;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+// ExerciseFilter styles
+.filterCard {
+  position: sticky;
+  top: 24px;
+}
+
+.filterHeader {
+  display: flex;
+  align-items: center;
+  
+  :global(.anticon) {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+  
+  h4 {
+    margin: 0;
+  }
+}
+
+.filterSection {
+  margin-bottom: 16px;
+}
+
+.typeRadioGroup {
+  width: 100%;
+}
+
+// Main page styles
+.layout {
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.mainContent {
+  margin-top: 24px;
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .content {
+    padding: 16px;
+  }
+  
+  .searchControls {
+    flex-direction: column;
+    align-items: center;
+    
+    > * {
+      margin-bottom: 12px !important;
+      width: 100% !important;
+    }
+  }
+}
+.backTopButton {
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+  background-color: #1890ff;
+  color: #fff;
+  text-align: center;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  transition: all 0.3s;
+  
+  &:hover {
+    background-color: #096dd9;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+}
