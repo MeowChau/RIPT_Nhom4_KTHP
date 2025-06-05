@@ -25,6 +25,7 @@
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.0",
+    "multer": "^2.0.1",
     "node-fetch": "^2.7.0",
     "openai": "^4.103.0",
     "xlsx": "^0.18.5"
