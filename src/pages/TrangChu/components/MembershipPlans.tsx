@@ -4,6 +4,7 @@ import PlanCard from './PlanCard';
 import BenefitCard from './BenefitCard';
 import { getMembershipPlans, getMembershipBenefits } from '@/services/membershipService';
 import styles from './MembershipPlans.less';
+import type { BenefitProps } from '@/models/membership';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -81,7 +82,7 @@ const MembershipPlans: React.FC = () => {
             <Row gutter={[24, 24]}>
               {benefits.map((benefit) => (
                 <Col xs={24} md={8} key={benefit.id}>
-                  <BenefitCard benefit={benefit} />
+                  <BenefitCard benefit={benefit as BenefitProps} />
                 </Col>
               ))}
             </Row>

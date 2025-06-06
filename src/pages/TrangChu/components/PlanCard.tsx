@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, List, Button, Typography, Divider, Badge } from 'antd';
 import { CheckCircleFilled } from '@ant-design/icons';
-import { PlanProps } from '@/models/membership';
+import type { PlanProps } from '@/models/membership';
 import styles from './PlanCard.less';
+import { history } from 'umi';
 
 const { Text, Title } = Typography;
 
@@ -61,10 +62,11 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
         />
         
         <Button 
-          type={plan.popular ? "primary" : "default"}
+          type={plan.popular ? 'primary' : 'default'}
           size="large" 
           block
           className={styles.actionButton}
+          onClick={() => history.push('/user/register')}
         >
           Đăng ký ngay
         </Button>

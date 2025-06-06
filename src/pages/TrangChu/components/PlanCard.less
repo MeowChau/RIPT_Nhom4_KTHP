@@ -4,6 +4,7 @@
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
+  padding: 12px;
   
   &:hover {
     transform: translateY(-8px);
@@ -50,24 +51,29 @@
 .priceContainer {
   margin-bottom: 20px;
   display: flex;
-  align-items: flex-end;
-  gap: 8px;
+  align-items: baseline;
+  gap: 4px;
   
   .price {
-    font-size: 32px;
-    font-weight: 700;
+    font: 700 32px Arial, sans-serif;
     color: #333;
+    line-height: 1;
+    white-space: nowrap;
     
     .currency {
-      font-size: 20px;
+      font-size: 22px;
       margin-left: 2px;
+      color: #333;
     }
   }
   
   .originalPrice {
     color: #999;
-    font-size: 18px;
+    font-size: 12px;
     font-weight: normal;
+    text-decoration: line-through;
+    line-height: 1;
+    white-space: nowrap;
   }
 }
 
@@ -95,6 +101,23 @@
   font-weight: 600;
   height: 48px;
   font-size: 16px;
+  background-color: #ff4d4f;
+  border-color: #ff4d4f;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover,
+  &:focus {
+    background-color: darken(#ff4d4f, 10%);
+    border-color: darken(#ff4d4f, 10%);
+    color: white;
+  }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
 }
 
 .ribbon {
