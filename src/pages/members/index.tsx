@@ -1,146 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button, message, Tag } from 'antd';
-import axios from 'axios';
-import moment from 'moment';
-import { ColumnsType } from 'antd/es/table';  // Import ColumnType
-import MemberFormModal from './MemberForm';
+import React, { useEffect } from 'react';
+import { PageContainer } from '@ant-design/pro-layout';
+import { Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import MemberTable from './components/MemberTable'; // Sửa lại import này
+import MemberForm from './components/MemberForm';
+import useMember from '@/models/useMember';
 
 const MembersPage: React.FC = () => {
-  const [members, setMembers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editingMember, setEditingMember] = useState<any | null>(null);
+  // Sử dụng custom hook để quản lý state và logic
+  const { 
+    members,
+    gyms,
+    loading,
+    modalVisible,
+    currentMember,
+    fetchMembers,
+    openEditModal,
+    closeModal,
+    handleAddMember,
+    handleUpdateMember,
+    handleDeleteMember,
+  } = useMember();
 
+  // Chỉ gọi fetchMembers một lần khi component được mount
   useEffect(() => {
     fetchMembers();
-  }, []);
+  }, []); // Bỏ fetchMembers khỏi dependencies để tránh vòng lặp vô hạn
 
-  const fetchMembers = async () => {
-    setLoading(true);
+  // Xử lý khi submit form (cả thêm mới và cập nhật)
+  const handleSubmit = async (values: any) => {
     try {
-      const { data } = await axios.get('/api/members');
-      setMembers(data);
-    } catch (error) {
-      message.error('Không tải được danh sách hội viên');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const openModal = (member: any | null = null) => {
-    setEditingMember(member);
-    setModalVisible(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      await axios.delete(`/api/members/${id}`);
-      message.success('Xoá hội viên thành công');
+      if (currentMember) {
+        // Cập nhật hội viên
+        await handleUpdateMember(currentMember._id, values);
+      } else {
+        // Thêm mới hội viên
+        await handleAddMember(values);
+      }
+      // Tải lại danh sách hội viên sau khi thêm/cập nhật thành công
       fetchMembers();
-    } catch {
-      message.error('Xoá hội viên thất bại');
+      return true; // Trả về true để form biết submit thành công
+    } catch (error) {
+      console.error('Failed to save member:', error);
+      return false; // Trả về false để form biết có lỗi
     }
   };
-
-  // ColumnsType<Any> type để đảm bảo tính tương thích với antd table
-  const columns: ColumnsType<any> = [
-    {
-      title: 'Tên hội viên',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Số điện thoại',
-      dataIndex: 'phone',
-      key: 'phone',
-    },
-    {
-      title: 'Gói tập',
-      dataIndex: 'membershipPackage',
-      key: 'membershipPackage',
-    },
-    {
-      title: 'Ngày bắt đầu',
-      dataIndex: 'startDate',
-      key: 'startDate',
-      render: (date: string) => (date ? moment(date).format('DD/MM/YYYY') : ''),
-      sorter: (a: any, b: any) => moment(a.startDate).isBefore(b.startDate) ? -1 : 1, // Sắp xếp theo ngày
-      sortDirections: ['descend', 'ascend'],
-    },
-    {
-      title: 'Ngày kết thúc',
-      dataIndex: 'endDate',
-      key: 'endDate',
-      render: (date: string) => (date ? moment(date).format('DD/MM/YYYY') : ''),
-      sorter: (a: any, b: any) => moment(a.endDate).isBefore(b.endDate) ? -1 : 1, // Sắp xếp theo ngày kết thúc
-      sortDirections: ['descend', 'ascend'],
-    },
-    {
-      title: 'Trạng thái',
-      key: 'status',
-      render: (_: any, record: any) => {
-        const today = moment();
-        const end = record.endDate ? moment(record.endDate) : null;
-        if (!end) return <Tag color="default">Không rõ</Tag>;
-        return end.isSameOrAfter(today, 'day') ? (
-          <Tag color="green">Còn hoạt động</Tag>
-        ) : (
-          <Tag color="red">Hết hạn</Tag>
-        );
-      },
-      sorter: (a: any, b: any) => {
-        const statusA = a.endDate ? (moment(a.endDate).isSameOrAfter(moment(), 'day') ? 'Còn hoạt động' : 'Hết hạn') : 'Không rõ';
-        const statusB = b.endDate ? (moment(b.endDate).isSameOrAfter(moment(), 'day') ? 'Còn hoạt động' : 'Hết hạn') : 'Không rõ';
-        return statusA.localeCompare(statusB);
-      },
-      sortDirections: ['descend', 'ascend'],
-    },
-    {
-      title: 'Hành động',
-      key: 'actions',
-      render: (_: any, record: any) => (
-        <>
-          <Button type="link" onClick={() => openModal(record)}>
-            Sửa
-          </Button>
-          <Button type="link" danger onClick={() => handleDelete(record._id)}>
-            Xoá
-          </Button>
-        </>
-      ),
-    },
-  ];
 
   return (
-    <div style={{ padding: 24 }}>
-      <h1>Quản lý Hội viên</h1>
-      <Button
-        type="primary"
-        style={{ marginBottom: 16 }}
-        onClick={() => openModal(null)}
-      >
-        Thêm hội viên mới
-      </Button>
-      <Table
+    <PageContainer 
+      title="Quản lý Hội viên"
+      extra={[
+        <Button 
+          key="add"
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={() => openEditModal(null)}
+        >
+          Thêm hội viên mới
+        </Button>
+      ]}
+    >
+      <MemberTable
         dataSource={members}
-        columns={columns}
-        rowKey="_id"
         loading={loading}
-        pagination={{ pageSize: 10 }}
+        onEdit={openEditModal}
+        onDelete={async (id) => {
+          const success = await handleDeleteMember(id);
+          if (success) {
+            // Tải lại danh sách sau khi xóa
+            fetchMembers();
+          }
+          return success;
+        }}
       />
 
-      <MemberFormModal
+      <MemberForm
         visible={modalVisible}
-        editingMember={editingMember}
-        onClose={() => setModalVisible(false)}
-        onSuccess={fetchMembers}
+        onCancel={closeModal}
+        onSubmit={handleSubmit}
+        initialValues={currentMember}
+        gyms={gyms}
       />
-    </div>
+    </PageContainer>
   );
 };
 
