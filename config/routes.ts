@@ -16,12 +16,7 @@ export default [
 	icon: 'bank',
 	component: './Gym/index',
 },
-{
-	path: '/thư-vien',
-	name: 'Thư viện bài tập',
-	icon: 'book',
-	component: './TrangChu/Library/index',
-},
+
  {
     path: '/gym/:id',
     component: './Gym/id',
@@ -75,35 +70,20 @@ export default [
   		path: '/user/forum',
   		name: 'Diễn đàn',
   		icon: 'message',
-  		component: './ForumTest/index',
+  		component: './Forum/index',
   		wrappers: ['@/wrappers/auth'],
   		access: 'canSeeForumPage',
 		},
-		{
-  		path: '/user/forum/baivietcuatoi',
-  		component: './ForumTest/components/BaiVietCuaToi',
-  		wrappers: ['@/wrappers/auth'],
-		},
-		{
-  		path: '/user/forum/top5vinhdanh',
-  		component: './ForumTest/components/Top5VinhDanh',
-  		wrappers: ['@/wrappers/auth'],
-		},
-		{
-		path: '/user/forum/thich',
-  		component: './ForumTest/components/Thich',
-  		wrappers: ['@/wrappers/auth'],
-		},
 		 {
     	path: '/user/forum/bai-viet',
-    	component: './ForumTest/bai-viet/index',
+    	component: './Forum/bai-viet/index',
     	// Thêm dòng này nếu không muốn hiển thị trên menu
     	hideInMenu: true,
 		wrappers: ['@/wrappers/auth'],
  		 },
 		 {
   		path: '/user/forum/bai-viet/:id',
- 		component: './ForumTest/components/ChiTietBaiViet',
+ 		component: './Forum/components/ChiTietBaiViet',
   		// Thêm dòng này nếu không muốn hiển thị trên menu
   		hideInMenu: true,
   		wrappers: ['@/wrappers/auth'],
@@ -115,6 +95,14 @@ export default [
   		// Thêm dòng này nếu không muốn hiển thị trên menu
   		wrappers: ['@/wrappers/auth'],
 		access: 'canSeeAIPage',
+		},
+		{
+		path: '/user/Exercise',
+		name: 'Thư viện bài tập',
+		icon: 'book',
+		component: './Exercise/index',
+		wrappers: ['@/wrappers/auth'],
+		access: 'canSeeExercisePage',
 		},
         {
             path: '/user',

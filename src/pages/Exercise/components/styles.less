@@ -1,25 +1,28 @@
 // SearchBar styles
 .searchBarContainer {
-  padding: 24px 0;
-  background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%);
+  padding: 30px 0;
+  background: linear-gradient(135deg, #40a9ff 0%, #9254de 100%);
   color: #fff;
   text-align: center;
-  border-radius: 8px;
-  margin-bottom: 24px;
+  border-radius: 12px;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 16px rgba(24, 144, 255, 0.15);
 }
 
 .titleSection {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   
   h2 {
     color: #fff;
-    font-size: 2.5rem;
-    margin-bottom: 8px;
+    font-size: 2.7rem;
+    margin-bottom: 12px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
   p {
-    font-size: 1rem;
-    opacity: 0.8;
+    font-size: 1.1rem;
+    opacity: 0.9;
   }
 }
 
@@ -33,10 +36,11 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 12px;
 }
 
 .searchInput {
-  min-width: 300px;
+  min-width: 320px;
 }
 
 // ExerciseCard styles
@@ -44,15 +48,20 @@
   height: 100%; // Chiều cao 100% của container
   display: flex;
   flex-direction: column;
-  transition: all 0.3s;
+  transition: all 0.35s ease;
   overflow: hidden;
+  border-radius: 12px;
   
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-7px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
     
     .cardOverlay {
       opacity: 1;
+    }
+    
+    .cardImage {
+      transform: scale(1.05);
     }
   }
   
@@ -61,20 +70,23 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    height: 200px; // Chiều cao cố định cho phần nội dung
+    height: 220px; // Chiều cao cố định cho phần nội dung
+    padding: 18px;
   }
   
   // Tiêu đề card có chiều cao cố định
   :global(.ant-card-meta-title) {
-    height: 50px;
+    height: 52px;
     overflow: hidden;
-    margin-bottom: 8px !important;
+    margin-bottom: 12px !important;
     
     h4 {
       margin-bottom: 0;
-      font-size: 16px;
-      line-height: 1.4;
-      height: 44px; // Chiều cao cố định cho tiêu đề (2 dòng)
+      font-size: 17px;
+      line-height: 1.45;
+      font-weight: 600;
+      color: #262626;
+      height: 48px; // Chiều cao cố định cho tiêu đề (2 dòng)
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -96,15 +108,17 @@
 
 .cardImageContainer {
   position: relative;
-  height: 180px; // Chiều cao cố định cho hình ảnh
+  height: 200px; // Tăng chiều cao cho hình ảnh
   overflow: hidden;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .cardImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s;
+  transition: transform 0.5s ease;
 }
 
 .cardOverlay {
@@ -113,41 +127,50 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.35s ease;
 }
 
 .playIcon {
-  font-size: 48px;
+  font-size: 54px;
   color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .exerciseStats {
   display: flex;
   margin-top: auto; // Đẩy xuống dưới cùng
-  padding-top: 12px;
+  padding-top: 14px;
   flex-wrap: wrap;
   border-top: 1px solid #f0f0f0;
 }
 
 .statItem {
-  margin-right: 16px;
+  margin-right: 18px;
   display: flex;
   align-items: baseline;
+  color: #595959;
   
   strong {
-    margin-right: 4px;
-    font-size: 1.1em;
+    margin-right: 6px;
+    font-size: 1.15em;
+    color: #1890ff;
   }
 }
 
 // ExerciseList styles
 .listContainer {
-  padding: 0 8px;
+  padding: 0 10px;
 }
 
 .spinContainer {
@@ -158,14 +181,16 @@
 }
 
 .emptyContainer {
-  padding: 60px 0;
+  padding: 80px 0;
+  text-align: center;
 }
 
 // ExerciseDetail styles
 .detailModal {
   :global(.ant-modal-content) {
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -176,6 +201,9 @@
 .playerWrapper {
   position: relative;
   padding-top: 56.25%; /* 16:9 aspect ratio */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .reactPlayer {
@@ -185,19 +213,21 @@
 }
 
 .modalContent {
-  padding: 24px;
+  padding: 28px;
 }
 
 .typeTag {
   margin-top: -8px;
   font-size: 14px;
-  padding: 4px 12px;
+  padding: 6px 14px;
+  border-radius: 16px;
 }
 
 .frequencyInfo {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin: 24px 0;
 }
 
 .frequencyItem {
@@ -205,65 +235,87 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 10px;
+  margin: 0 14px;
 }
 
 .frequencyIcon {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  background: #f0f5ff;
+  background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 8px;
-  font-size: 24px;
-  color: #1890ff;
+  margin-bottom: 10px;
+  font-size: 26px;
+  color: #0050b3;
+  box-shadow: 0 4px 8px rgba(24, 144, 255, 0.2);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+  }
 }
 
 .frequencyValue {
   font-weight: bold;
   margin-left: 4px;
+  font-size: 1.1em;
+  color: #262626;
 }
 
 .frequencyLabel {
-  font-size: 14px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.65);
+  margin-top: 4px;
 }
 
 .playButton {
-  font-size: 64px;
+  font-size: 68px;
   color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .modalFooter {
   display: flex;
   justify-content: flex-end;
-  margin-top: 24px;
+  margin-top: 28px;
+  gap: 12px;
 }
 
 // ExerciseFilter styles
 .filterCard {
   position: sticky;
   top: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .filterHeader {
   display: flex;
   align-items: center;
+  margin-bottom: 16px;
   
   :global(.anticon) {
-    margin-right: 8px;
-    font-size: 18px;
+    margin-right: 10px;
+    font-size: 20px;
+    color: #1890ff;
   }
   
   h4 {
     margin: 0;
+    font-size: 17px;
+    color: #262626;
   }
 }
 
 .filterSection {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .typeRadioGroup {
@@ -273,17 +325,17 @@
 // Main page styles
 .layout {
   min-height: 100vh;
-  background: #f0f2f5;
+  background: #f5f7fa;
 }
 
 .content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 28px;
 }
 
 .mainContent {
-  margin-top: 24px;
+  margin-top: 28px;
 }
 
 // Responsive styles
@@ -301,11 +353,20 @@
       width: 100% !important;
     }
   }
+  
+  .frequencyInfo {
+    flex-direction: column;
+    
+    .frequencyItem {
+      margin-bottom: 16px;
+    }
+  }
 }
+
 .backTopButton {
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
+  height: 46px;
+  width: 46px;
+  line-height: 46px;
   border-radius: 50%;
   background-color: #1890ff;
   color: #fff;
@@ -314,11 +375,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.35s ease;
   
   &:hover {
     background-color: #096dd9;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px);
   }
 }
