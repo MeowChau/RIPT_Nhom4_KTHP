@@ -2,72 +2,50 @@
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
-// import proxy from './proxy';
-// const { REACT_APP_ENV } = process.env;
+import proxy from './proxy';
+
+// Môi trường (dev/test/prod)
+const { REACT_APP_ENV = 'dev' } = process.env;
 
 export default defineConfig({
-    hash: true,
-    antd: {},
-    dva: {
-        hmr: true,
-    },
-    layout: {
-        // https://umijs.org/zh-CN/plugins/plugin-layout
-        locale: true,
-        ...defaultSettings,
-    },
-    // https://umijs.org/zh-CN/plugins/plugin-locale
-    locale: {
-        // enable: true,
-        default: 'vi-VN',
-        antd: true,
-        // default true, when it is true, will use `navigator.language` overwrite default
-        baseNavigator: false,
-        // baseSeparator: '_',
-    },
-    dynamicImport: {
-        loading: '@ant-design/pro-layout/es/PageLoading',
-    },
-    targets: {
-        ie: 11,
-    },
-    routes,
-    // Theme for antd: https://ant.design/docs/react/customize-theme-cn
-    theme: {
-        'primary-color': defaultSettings.primaryColor,
-        'border-radius-base': defaultSettings.borderRadiusBase,
-    },
-    // esbuild is father build tools
-    // https://umijs.org/plugins/plugin-esbuild
-    esbuild: {},
-    title: false,
-    ignoreMomentLocale: true,
-    // Cấu hình proxy để kết nối đến backend
-    proxy: {
-        '/api': {
-            'target': 'https://ript-nhom4-kthp-xyz.onrender.com',
-            'changeOrigin': true,
-        },
-    },
-    manifest: {
-        basePath: '/',
-    },
-    // Fast Refresh 热更新
-    fastRefresh: {},
+  hash: true,
+  antd: {},
+  dva: { hmr: true },
+  layout: {
+    locale: true,
+    ...defaultSettings,
+  },
+  locale: {
+    default: 'vi-VN',
+    antd: true,
+    baseNavigator: false,
+  },
+  dynamicImport: {
+    loading: '@ant-design/pro-layout/es/PageLoading',
+  },
+  targets: { ie: 11 },
+  routes,
 
-    nodeModulesTransform: {
-        type: 'none',
-    },
-    // mfsu: {},
-    webpack5: {},
-    exportStatic: {},
-    define: Object.entries(process.env).reduce((result, [key, value]) => {
-        if (key.startsWith('APP_CONFIG_')) {
-            return {
-                ...result,
-                [key]: value,
-            };
-        }
-        return result;
-    }, {}),
+  // Cấu hình proxy để chuyển /api sang backend
+  proxy: proxy[REACT_APP_ENV],
+
+  // Theme cho antd
+  theme: {
+    'primary-color': defaultSettings.primaryColor,
+    'border-radius-base': defaultSettings.borderRadiusBase,
+  },
+
+  esbuild: {},
+  title: false,
+  ignoreMomentLocale: true,
+  manifest: { basePath: '/' },
+  fastRefresh: {},
+  nodeModulesTransform: { type: 'none' },
+  webpack5: {},
+  exportStatic: {},
+
+  // Inject biến môi trường cho client
+  define: {
+    'process.env.UMI_APP_API_URL': process.env.UMI_APP_API_URL,
+  },
 });

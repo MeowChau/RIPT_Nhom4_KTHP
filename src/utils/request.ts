@@ -2,11 +2,21 @@ import axios from 'axios';
 import { message } from 'antd';
 import { history } from 'umi';
 
+// Xác định API URL dựa trên môi trường
+const isProduction = process.env.NODE_ENV === 'production';
+const API_URL = isProduction ? 'https://ript-nhom4-kthp-xyz.onrender.com' : '';
+
+// Tạo instance axios với baseURL
+const request = axios.create({
+  baseURL: API_URL,
+  timeout: 10000,
+});
+
 // Biến để theo dõi nếu đã hiển thị thông báo lỗi
 let isShowingSessionError = false;
 
 // Interceptor để tự động thêm token vào mọi request
-axios.interceptors.request.use(
+request.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -20,7 +30,7 @@ axios.interceptors.request.use(
 );
 
 // Interceptor để xử lý các lỗi phản hồi, đặc biệt là lỗi xác thực
-axios.interceptors.response.use(
+request.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -49,4 +59,4 @@ axios.interceptors.response.use(
   }
 );
 
-export default axios;
+export default request;
