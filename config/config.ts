@@ -6,7 +6,7 @@ import proxy from './proxy';
 
 // Xác định môi trường (dev | test | pre)
 const { REACT_APP_ENV = 'dev' } = process.env;
-// Đảm bảo kiểu an toàn khi truy cập proxy
+// Kiểu an toàn cho proxy keys
 type ProxyEnv = keyof typeof proxy;
 const env = REACT_APP_ENV as ProxyEnv;
 
@@ -32,6 +32,7 @@ export default defineConfig({
   // Proxy: tự chọn config theo môi trường
   proxy: proxy[env],
 
+  // Theme cho antd
   theme: {
     'primary-color': defaultSettings.primaryColor,
     'border-radius-base': defaultSettings.borderRadiusBase,
@@ -46,8 +47,14 @@ export default defineConfig({
   webpack5: {},
   exportStatic: {},
 
-  // Inject biến môi trường cho client
-  define: {
-    'process.env.UMI_APP_API_URL': process.env.UMI_APP_API_URL,
-  },
+  // Inject biến môi trường cho client (bao gồm APP_CONFIG_* và UMI_APP_API_URL)
+  define: Object.entries(process.env).reduce((acc, [key, value]) => {
+    if (key.startsWith('APP_CONFIG_') || key === 'UMI_APP_API_URL') {
+      return {
+        ...acc,
+        [`process.env.${key}`]: value,
+      };
+    }
+    return acc;
+  }, {} as Record<string, any>),
 });
