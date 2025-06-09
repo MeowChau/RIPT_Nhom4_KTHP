@@ -12,6 +12,10 @@ import './style.less';
 const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () => void; hideCard?: boolean }) => {
 	const { record, afterViewDetail, hideCard } = props;
 
+	if (!record) {
+		return <Card><div>Không tìm thấy nội dung thông báo.</div></Card>;
+	}
+
 	const redirectNotif = () => {
 		const urlMap: Record<EModuleKey, string> = {
 			[EModuleKey.CONNECT]: APP_CONFIG_URL_CONNECT,
@@ -48,14 +52,14 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 				avatar={record?.imageUrl ? <Avatar src={record?.imageUrl} size='large' /> : false}
 				description={
 					<>
-						<div style={{ marginBottom: 8 }}>{record?.description}</div>
+						<div style={{ marginBottom: 8 }}>{record?.description || record?.message || 'Không có mô tả.'}</div>
 						<UserOutlined /> {record?.senderName ?? ''} <Divider type='vertical' />
-						<CalendarOutlined /> {moment(record?.createdAt).format('HH:mm DD/MM/YYYY')}
+						<CalendarOutlined /> {record?.createdAt ? moment(record?.createdAt).format('HH:mm DD/MM/YYYY') : ''}
 					</>
 				}
 			/>
 			<br />
-			<div dangerouslySetInnerHTML={{ __html: record?.content ?? '' }} className='notif-content' />
+			<div dangerouslySetInnerHTML={{ __html: record?.content ?? record?.message ?? 'Không có nội dung.' }} className='notif-content' />
 			<Row style={{ marginTop: 12 }} gutter={[12, 12]}>
 				{record?.taiLieuDinhKem?.length ? (
 					<>
@@ -88,7 +92,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 	);
 
 	if (hideCard) return content;
-	return <Card title={record?.title}>{content}</Card>;
+	return <Card title={record?.title || 'Thông báo'}>{content}</Card>;
 };
 
 export default ViewThongBao;

@@ -93,11 +93,11 @@ const NoticeIcon: React.FC<NoticeIconProps> & {
 			arrow
 		>
 			<Tooltip title='Thông báo' placement='bottom'>
-				<a className={styles.badge}>
+				<span className={styles.badge} style={{ cursor: 'pointer' }}>
 					<Badge count={count ? (count < 100 ? count : '99+') : undefined} style={{ boxShadow: 'none' }}>
 						{bell || <BellOutlined />}
 					</Badge>
-				</a>
+				</span>
 			</Tooltip>
 		</HeaderDropdown>
 	);

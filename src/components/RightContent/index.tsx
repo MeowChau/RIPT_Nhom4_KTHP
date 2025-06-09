@@ -2,6 +2,7 @@ import React from 'react';
 import { useModel } from 'umi';
 import AvatarDropdown from './AvatarDropdown';
 import styles from './index.less';
+import NoticeIconView from './NoticeIcon';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -24,6 +25,7 @@ const GlobalHeaderRight: React.FC = () => {
 				</a>
 			</Tooltip> */}
 
+			<NoticeIconView />
 			<AvatarDropdown menu />
 		</div>
 	);
