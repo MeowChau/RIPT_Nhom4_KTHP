@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const aiRoutes = require('./routes/aiRoutes');
 const exerciseRoutes = require('./routes/exerciseRoutes');
+const calorieRoutes = require('./routes/calorieRoutes');
 const app = express();
 
 // Bổ sung đoạn này để tăng giới hạn payload JSON và URL encoded lên 20MB
@@ -60,5 +61,6 @@ app.use('/api/auth', authRoutes); // Giữ lại dòng này
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/exercises', exerciseRoutes);
+app.use('/api/calories', calorieRoutes);
 
 module.exports = app;
