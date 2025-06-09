@@ -1,5 +1,4 @@
-﻿
-export default [
+﻿export default [
 	
 
 	///////////////////////////////////
@@ -16,7 +15,6 @@ export default [
 	icon: 'bank',
 	component: './Gym/index',
 },
-
  {
     path: '/gym/:id',
     component: './Gym/id',
@@ -66,8 +64,7 @@ export default [
   		wrappers: ['@/wrappers/auth'],
   		access: 'canSeeTDEEPage',
 		},
-		
-		 {
+		{
   		path: '/user/AI',
 		name: 'AI tư vấn',
  		component: './AI/index',
@@ -76,19 +73,12 @@ export default [
 		access: 'canSeeAIPage',
 		},
 		{
-		path: '/user/Calo',
+  		path: '/user/Calo',
 		name: 'Theo dõi Calo',
-		component: './Calo/index',
-		wrappers: ['@/wrappers/auth'],
+ 		component: './Calo/index',
+  		// Thêm dòng này nếu không muốn hiển thị trên menu
+  		wrappers: ['@/wrappers/auth'],
 		access: 'canSeeCaloPage',
-		},
-		{
-		path: '/user/Exercise',
-		name: 'Thư viện bài tập',
-		icon: 'book',
-		component: './Exercise/index',
-		wrappers: ['@/wrappers/auth'],
-		access: 'canSeeExercisePage',
 		},
 		{
   		path: '/user/forum',
@@ -112,10 +102,20 @@ export default [
   		hideInMenu: true,
   		wrappers: ['@/wrappers/auth'],
 		},
+		 
+		{
+		path: '/user/Exercise',
+		name: 'Thư viện bài tập',
+		icon: 'book',
+		component: './Exercise/index',
+		wrappers: ['@/wrappers/auth'],
+		access: 'canSeeExercisePage',
+		},
         {
             path: '/user',
             redirect: '/user/login',
         },
+		
 	],
 },
 	// DANH MUC HE THONG
@@ -169,5 +169,12 @@ export default [
 	},
 	{
 		component: './exception/404',
+	},
+	{
+		path: '/rewards',
+		name: 'Đổi quà',
+		icon: 'gift',
+		component: './Rewards/index',
+		wrappers: ['@/wrappers/auth'],
 	},
 ];

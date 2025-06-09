@@ -1,15 +1,10 @@
 import React from 'react';
 import { List, Badge, Avatar, Typography, Tooltip } from 'antd';
-import type { ThongBao as IThongBao } from '@/services/Forum/typings';
+import type { ThongBao as IThongBao, ThongBaoProps } from '@/services/Forum/typings';
 import { formatTimeDistance, formatDateTime } from '@/utils/timeUtils';
 import { Link } from 'umi';
 
 const { Text } = Typography;
-
-interface ThongBaoProps {
-  thongBao: IThongBao;
-  onClick: (thongBaoId: string) => void;
-}
 
 const ThongBao: React.FC<ThongBaoProps> = ({ thongBao, onClick }) => {
   const handleClick = () => {

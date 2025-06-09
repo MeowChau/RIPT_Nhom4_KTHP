@@ -1,13 +1,9 @@
 import React from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { history } from 'umi';
+import { FormTaoBaiVietProps } from '@/services/Forum/typings';
 
 const { TextArea } = Input;
-
-interface FormTaoBaiVietProps {
-  onSubmit: (values: { tieuDe: string; noiDung: string }) => Promise<boolean>;
-  dangTai: boolean;
-}
 
 const FormTaoBaiViet: React.FC<FormTaoBaiVietProps> = ({ onSubmit, dangTai }) => {
   const [form] = Form.useForm();

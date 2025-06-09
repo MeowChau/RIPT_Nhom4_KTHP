@@ -2,17 +2,14 @@ import React from 'react';
 import { Card, Avatar, Space, Typography, Button, Tooltip, Tag } from 'antd';
 import { LikeOutlined, LikeFilled, CommentOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'umi';
-import type { BaiViet as IBaiViet } from '@/services/Forum/typings';
+import type { BaiVietProps, BaiViet as IBaiViet } from '@/services/Forum/typings';
 import { formatTimeDistance } from '../../../utils/timeUtils';
 
 const { Title, Paragraph, Text } = Typography;
 
-export interface BaiVietProps {
-  baiViet: IBaiViet;
-  onThich: (baiVietId: string) => void;
-}
 
-const BaiViet: React.FC<BaiVietProps> = ({ baiViet, onThich }) => {
+
+const BaiViet: React.FC<BaiVietProps> = ({ baiViet, onThich, onXoa }) => {
   // Kiểm tra và đảm bảo các trường dữ liệu tồn tại
   const tenNguoiDang = baiViet?.tenNguoiDang || 'Người dùng';
   const avatarText = tenNguoiDang ? tenNguoiDang[0] : 'U';
@@ -23,6 +20,15 @@ const BaiViet: React.FC<BaiVietProps> = ({ baiViet, onThich }) => {
   // Debug để xem đang nhận được gì
   console.log('Dữ liệu bài viết:', baiViet);
   
+  // Lấy userId hiện tại từ localStorage (ưu tiên _id, sau đó id, ép kiểu về string)
+  const userData = localStorage.getItem('user');
+  let currentUserId = '';
+  if (userData) {
+    const userObj = JSON.parse(userData);
+    currentUserId = (userObj._id || userObj.id || '').toString();
+  }
+  const isOwner = (baiViet.nguoiDangId?.toString() === currentUserId);
+
   return (
     <Card style={{ marginBottom: 16 }} bordered={false}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
@@ -47,6 +53,11 @@ const BaiViet: React.FC<BaiVietProps> = ({ baiViet, onThich }) => {
             </Tooltip>
           </div>
         </Space>
+        {isOwner && onXoa && (
+          <Button danger type="link" onClick={() => onXoa(baiViet.id)} style={{ marginLeft: 16 }}>
+            Xóa bài viết
+          </Button>
+        )}
       </div>
       
       <div style={{ margin: '16px 0' }}>
