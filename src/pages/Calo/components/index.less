@@ -1,0 +1,415 @@
+@import '~antd/es/style/themes/default.less';
+
+// Gradient và màu sắc chính
+@gradient-primary: linear-gradient(135deg, #13c2c2 0%, #1890ff 100%);
+@gradient-success: linear-gradient(135deg, #52c41a 0%, #13c2c2 100%);
+@gradient-warning: linear-gradient(135deg, #faad14 0%, #f5222d 50%);
+@card-shadow: 0 8px 16px rgba(24, 144, 255, 0.1);
+@border-radius-xl: 12px;
+
+// Container chính
+.mainContainer {
+  padding-bottom: 40px;
+  background-image: linear-gradient(to bottom, rgba(240, 242, 245, 0.4), rgba(240, 242, 245, 0.8));
+  min-height: 80vh;
+}
+
+// Header trang
+.pageHeader {
+  background: @gradient-primary;
+  margin-bottom: 28px;
+  padding: 22px 32px;
+  border-radius: @border-radius-base;
+  box-shadow: @card-shadow;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    left: -10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// Card thống kê
+.statisticsCard {
+  margin-bottom: 28px;
+  border-radius: @border-radius-xl;
+  box-shadow: @card-shadow;
+  border: none;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(24, 144, 255, 0.15);
+  }
+  
+  .statistic {
+    text-align: center;
+    
+    .ant-statistic-title {
+      color: @text-color-secondary;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    
+    .ant-statistic-content {
+      font-size: 28px;
+      font-weight: 600;
+    }
+  }
+  
+  .statisticIcon {
+    margin-right: 10px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #1890ff, #13c2c2);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .ant-card-head {
+    border-bottom: 1px solid rgba(24, 144, 255, 0.1);
+    padding: 0 24px;
+    
+    .ant-card-head-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+}
+
+// Card form
+.formCard {
+  margin-bottom: 28px;
+  border-radius: @border-radius-xl;
+  box-shadow: @card-shadow;
+  border: none;
+  
+  .ant-card-head {
+    border-bottom: 1px solid rgba(24, 144, 255, 0.1);
+    
+    .ant-card-head-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+  
+  .ant-form-item-label > label {
+    font-weight: 500;
+    color: @text-color;
+  }
+  
+  .ant-input-number, .ant-picker, .ant-select-selector {
+    border-radius: 6px;
+    border: 1px solid #d9d9d9;
+    box-shadow: none;
+    transition: all 0.3s;
+    
+    &:hover, &:focus {
+      border-color: @primary-color;
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+    }
+  }
+  
+  .ant-statistic-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  .ant-statistic-content {
+    font-weight: 600;
+  }
+}
+
+// Card biểu đồ
+.chartCard {
+  margin-bottom: 28px;
+  border-radius: @border-radius-xl;
+  box-shadow: @card-shadow;
+  border: none;
+  height: 100%;
+  
+  .ant-card-body {
+    padding: 24px;
+  }
+  
+  .ant-empty {
+    margin: 32px 0;
+  }
+}
+
+// Card bảng
+.tableCard {
+  margin-bottom: 28px;
+  border-radius: @border-radius-xl;
+  box-shadow: @card-shadow;
+  border: none;
+  
+  .ant-table-thead > tr > th {
+    background-color: rgba(24, 144, 255, 0.04);
+    font-weight: 600;
+  }
+  
+  .ant-table-row {
+    transition: all 0.3s;
+    
+    &:hover {
+      background-color: rgba(24, 144, 255, 0.03);
+    }
+  }
+  
+  .overRow {
+    background-color: fade(@red-1, 60%);
+    
+    &:hover {
+      background-color: fade(@red-1, 80%) !important;
+    }
+  }
+  
+  .underRow {
+    background-color: fade(@green-1, 60%);
+    
+    &:hover {
+      background-color: fade(@green-1, 80%) !important;
+    }
+  }
+  
+  .ant-tag {
+    border: none;
+    border-radius: 12px;
+    padding: 2px 12px;
+    font-weight: 500;
+  }
+  
+  .ant-btn-link {
+    border-radius: 6px;
+    transition: all 0.3s;
+    
+    &:hover {
+      background-color: rgba(24, 144, 255, 0.1);
+      color: @primary-color;
+    }
+  }
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 220px;
+  
+  .ant-spin {
+    margin-bottom: 16px;
+  }
+  
+  &:after {
+    content: 'Đang tải dữ liệu...';
+    color: @text-color-secondary;
+    font-size: 14px;
+  }
+}
+
+// Phần tiến trình
+.progressSection {
+  margin-top: 28px;
+  padding: 16px;
+  background: rgba(240, 242, 245, 0.6);
+  border-radius: 12px;
+  
+  .progressTitle {
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    
+    .anticon {
+      margin-right: 8px;
+      color: @primary-color;
+    }
+  }
+  
+  .progressBar {
+    margin-bottom: 12px;
+    
+    // Tùy chỉnh progress bar
+    .ant-progress-inner {
+      border-radius: 8px;
+      background-color: rgba(24, 144, 255, 0.1);
+    }
+    
+    .ant-progress-bg {
+      border-radius: 8px;
+    }
+  }
+  
+  .progressStatus {
+    text-align: center;
+    margin-top: 16px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+}
+
+// Hàng hiển thị kết quả tính toán
+.calculatedRow {
+  align-items: center;
+  background: rgba(24, 144, 255, 0.03);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 24px;
+  
+  .ant-col {
+    padding: 8px;
+  }
+  
+  .ant-statistic {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .submitButtonCol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0;
+    
+    .ant-btn {
+      height: 46px;
+      border-radius: 8px;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(24, 144, 255, 0.25);
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(24, 144, 255, 0.3);
+      }
+    }
+  }
+}
+
+// Container cho tabs
+.tabsContainer {
+  background: @component-background;
+  padding: 28px;
+  border-radius: @border-radius-xl;
+  box-shadow: @card-shadow;
+  
+  .ant-tabs-nav {
+    margin-bottom: 24px;
+    
+    &:before {
+      border-bottom: 1px solid rgba(24, 144, 255, 0.1);
+    }
+    
+    .ant-tabs-tab {
+      padding: 12px 16px;
+      margin: 0 8px 0 0;
+      transition: all 0.3s;
+      
+      &:hover {
+        color: @primary-color;
+      }
+      
+      .anticon {
+        margin-right: 8px;
+      }
+    }
+    
+    .ant-tabs-tab-active {
+      .ant-tabs-tab-btn {
+        font-weight: 600;
+      }
+    }
+    
+    .ant-tabs-ink-bar {
+      height: 3px;
+      border-radius: 3px;
+      background: @gradient-primary;
+    }
+  }
+}
+
+// Alert cảnh báo
+.ant-alert {
+  margin-bottom: 24px;
+  border-radius: 8px;
+  border: none;
+  
+  .ant-alert-message {
+    font-weight: 500;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .statisticsCard .statistic {
+    margin-bottom: 20px;
+  }
+  
+  .submitButtonCol {
+    margin-top: 16px;
+  }
+  
+  .tabsContainer {
+    padding: 16px;
+  }
+  
+  .calculatedRow {
+    padding: 12px;
+    
+    .ant-statistic {
+      margin-bottom: 12px;
+    }
+    
+    .submitButtonCol .ant-btn {
+      height: 40px;
+    }
+  }
+  
+  .pageHeader {
+    padding: 16px 20px;
+  }
+  
+  .progressSection {
+    padding: 12px;
+  }
+}
+
+// Hiệu ứng hover cho các card
+.chartCard, .tableCard, .formCard {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(24, 144, 255, 0.15);
+  }
+}

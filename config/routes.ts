@@ -170,11 +170,5 @@
 	{
 		component: './exception/404',
 	},
-	{
-		path: '/rewards',
-		name: 'Đổi quà',
-		icon: 'gift',
-		component: './Rewards/index',
-		wrappers: ['@/wrappers/auth'],
-	},
+	
 ];
