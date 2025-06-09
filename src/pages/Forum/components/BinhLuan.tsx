@@ -3,21 +3,10 @@ import { List, Comment, Avatar, Form, Button, Input, message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useModel } from 'umi';
 import { getBinhLuansByBaiVietId as getBinhLuanList, createBinhLuan } from '@/services/Forum/index';
-import type { BinhLuan as IBinhLuan } from '@/services/Forum/typings';
+import type { BinhLuanProps, BinhLuan as IBinhLuan, IUser } from '@/services/Forum/typings';
 
 const { TextArea } = Input;
 
-// Định nghĩa interface cho props
-export interface BinhLuanProps {
-  baiVietId: string;
-}
-interface IUser {
-  userid?: string;
-  id?: string;
-  name?: string;
-  email?: string;
-  [key: string]: any; // Cho phép các thuộc tính khác
-}
 
 const BinhLuan: React.FC<BinhLuanProps> = ({ baiVietId }) => {
   const [form] = Form.useForm();

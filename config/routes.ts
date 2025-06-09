@@ -1,5 +1,4 @@
-﻿
-export default [
+﻿export default [
 	
 
 	///////////////////////////////////
@@ -16,7 +15,6 @@ export default [
 	icon: 'bank',
 	component: './Gym/index',
 },
-
  {
     path: '/gym/:id',
     component: './Gym/id',
@@ -65,8 +63,8 @@ export default [
   		component: './TDEE/index',
   		wrappers: ['@/wrappers/auth'],
   		access: 'canSeeTDEEPage',
-		},
-		{
+		}, 
+		 {
   		path: '/user/forum',
   		name: 'Diễn đàn',
   		icon: 'message',
@@ -96,18 +94,18 @@ export default [
   		wrappers: ['@/wrappers/auth'],
 		access: 'canSeeAIPage',
 		},
-		{
-		path: '/user/Exercise',
-		name: 'Thư viện bài tập',
-		icon: 'book',
-		component: './Exercise/index',
-		wrappers: ['@/wrappers/auth'],
-		access: 'canSeeExercisePage',
-		},
         {
             path: '/user',
             redirect: '/user/login',
         },
+		{
+			path: '/user/renew-membership',
+			name: 'Gia hạn gói tập',
+			component: './Profile/renew-membership',
+			wrappers: ['@/wrappers/auth'],
+			access: 'canSeeProfilePage',
+			hideInMenu: true,
+		},
 	],
 },
 	// DANH MUC HE THONG
@@ -161,5 +159,12 @@ export default [
 	},
 	{
 		component: './exception/404',
+	},
+	{
+		path: '/rewards',
+		name: 'Đổi quà',
+		icon: 'gift',
+		component: './Rewards/index',
+		wrappers: ['@/wrappers/auth'],
 	},
 ];
