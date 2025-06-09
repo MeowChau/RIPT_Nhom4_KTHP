@@ -4,8 +4,11 @@ import defaultSettings from './defaultSettings';
 import routes from './routes';
 import proxy from './proxy';
 
-// Môi trường (dev/test/prod)
+// Xác định môi trường (dev | test | pre)
 const { REACT_APP_ENV = 'dev' } = process.env;
+// Đảm bảo kiểu an toàn khi truy cập proxy
+type ProxyEnv = keyof typeof proxy;
+const env = REACT_APP_ENV as ProxyEnv;
 
 export default defineConfig({
   hash: true,
@@ -26,10 +29,9 @@ export default defineConfig({
   targets: { ie: 11 },
   routes,
 
-  // Cấu hình proxy để chuyển /api sang backend
-  proxy: proxy[REACT_APP_ENV],
+  // Proxy: tự chọn config theo môi trường
+  proxy: proxy[env],
 
-  // Theme cho antd
   theme: {
     'primary-color': defaultSettings.primaryColor,
     'border-radius-base': defaultSettings.borderRadiusBase,
