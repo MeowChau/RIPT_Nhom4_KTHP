@@ -66,6 +66,30 @@ export default [
   		wrappers: ['@/wrappers/auth'],
   		access: 'canSeeTDEEPage',
 		},
+		
+		 {
+  		path: '/user/AI',
+		name: 'AI tư vấn',
+ 		component: './AI/index',
+  		// Thêm dòng này nếu không muốn hiển thị trên menu
+  		wrappers: ['@/wrappers/auth'],
+		access: 'canSeeAIPage',
+		},
+		{
+		path: '/user/Calo',
+		name: 'Theo dõi Calo',
+		component: './Calo/index',
+		wrappers: ['@/wrappers/auth'],
+		access: 'canSeeCaloPage',
+		},
+		{
+		path: '/user/Exercise',
+		name: 'Thư viện bài tập',
+		icon: 'book',
+		component: './Exercise/index',
+		wrappers: ['@/wrappers/auth'],
+		access: 'canSeeExercisePage',
+		},
 		{
   		path: '/user/forum',
   		name: 'Diễn đàn',
@@ -87,22 +111,6 @@ export default [
   		// Thêm dòng này nếu không muốn hiển thị trên menu
   		hideInMenu: true,
   		wrappers: ['@/wrappers/auth'],
-		},
-		 {
-  		path: '/user/AI',
-		name: 'AI tư vấn',
- 		component: './AI/index',
-  		// Thêm dòng này nếu không muốn hiển thị trên menu
-  		wrappers: ['@/wrappers/auth'],
-		access: 'canSeeAIPage',
-		},
-		{
-		path: '/user/Exercise',
-		name: 'Thư viện bài tập',
-		icon: 'book',
-		component: './Exercise/index',
-		wrappers: ['@/wrappers/auth'],
-		access: 'canSeeExercisePage',
 		},
         {
             path: '/user',
