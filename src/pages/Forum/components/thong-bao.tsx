@@ -1,57 +1,50 @@
-import React from 'react';
-import { List, Badge, Avatar, Typography, Tooltip } from 'antd';
-import type { ThongBao as IThongBao, ThongBaoProps } from '@/services/Forum/typings';
-import { formatTimeDistance, formatDateTime } from '@/utils/timeUtils';
-import { Link } from 'umi';
+import { useEffect } from 'react';
+import { PageContainer } from '@ant-design/pro-layout';
+import { List, Card, Empty, Spin } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { history, useModel } from 'umi';
+import ThongBao from '@/pages/Forum/components/ThongBao';
+import useThongBao from '@/models/forum/useThongBao';
 
-const { Text } = Typography;
+export default () => {
+  const { initialState } = useModel('@@initialState');
+  const { danhSachThongBao, dangTai, layDanhSachThongBao, danhDauDaDoc } = useThongBao();
 
-const ThongBao: React.FC<ThongBaoProps> = ({ thongBao, onClick }) => {
-  const handleClick = () => {
-    if (!thongBao.daDoc) {
-      onClick(thongBao.id);
+  useEffect(() => {
+    if (initialState?.currentUser) {
+      layDanhSachThongBao();
     }
-  };
-
-  let href = '/';
-  if (thongBao.baiVietId) {
-    href = `/bai-viet/${thongBao.baiVietId}`;
-  }
+  }, [layDanhSachThongBao, initialState?.currentUser]);
 
   return (
-    <Link to={href}>
-      <List.Item 
-        onClick={handleClick}
-        style={{ 
-          backgroundColor: thongBao.daDoc ? 'transparent' : '#f0f7ff',
-          cursor: 'pointer',
-          padding: '12px 16px'
-        }}
-      >
-        <List.Item.Meta
-          avatar={
-            <Badge dot={!thongBao.daDoc}>
-              <Avatar>{thongBao.tenNguoiThich[0]}</Avatar>
-            </Badge>
-          }
-          title={
-            <Text strong={!thongBao.daDoc}>
-              {thongBao.noiDung}
-            </Text>
-          }
-          description={
-            <div>
-              <Text type="secondary">Email: {thongBao.emailNguoiThich}</Text>
-              <br />
-              <Tooltip title={formatDateTime(thongBao.thoiGian)}>
-                <Text type="secondary">{formatTimeDistance(thongBao.thoiGian)}</Text>
-              </Tooltip>
-            </div>
-          }
-        />
-      </List.Item>
-    </Link>
+    <PageContainer
+      header={{
+        title: 'Thông báo',
+        onBack: () => history.push('/'),
+        backIcon: <ArrowLeftOutlined />
+      }}
+    >
+      <Card bordered={false}>
+        {dangTai ? (
+          <div style={{ textAlign: 'center', padding: '20px 0' }}>
+            <Spin />
+          </div>
+        ) : (
+          <List
+            dataSource={danhSachThongBao}
+            renderItem={thongBao => (
+              <ThongBao 
+                key={thongBao.id} 
+                thongBao={thongBao} 
+                onClick={danhDauDaDoc}
+              />
+            )}
+            locale={{
+              emptyText: <Empty description="Không có thông báo nào" />
+            }}
+          />
+        )}
+      </Card>
+    </PageContainer>
   );
 };
-
-export default ThongBao;

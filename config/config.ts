@@ -45,7 +45,7 @@ export default defineConfig({
     // Cấu hình proxy để kết nối đến backend
     proxy: {
         '/api': {
-            'target': 'http://localhost:5000',
+            'target': 'https://ript-nhom4-kthp-xyz.onrender.com',
             'changeOrigin': true,
         },
     },

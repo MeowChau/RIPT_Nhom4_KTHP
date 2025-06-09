@@ -1,6 +1,6 @@
 import { request } from 'umi';
 
-const API_URL = process.env.UMI_APP_API_URL || 'http://localhost:5000';
+const API_URL = process.env.UMI_APP_API_URL || 'https://ript-nhom4-kthp-xyz.onrender.com';
 
 /**
  * Lấy thông tin của hội viên theo ID
