@@ -42,26 +42,26 @@ const CalorieStatistics: React.FC<StatisticsProps> = ({ weeklySummary, loading }
 
   const renderWeeklyStatus = () => {
     if (summary.caloDiff > 500) {
-      return <Text type="danger">You&apos;re significantly over your calorie target this week</Text>;
+      return <Text type="danger">Bạn đã vượt quá đáng kể mục tiêu calorie tuần này</Text>;
     } else if (summary.caloDiff > 0) {
-      return <Text type="warning">You&apos;re slightly over your calorie target this week</Text>;
+      return <Text type="warning">Bạn đã vượt nhẹ mục tiêu calorie tuần này</Text>;
     } else if (summary.caloDiff < -500) {
-      return <Text type="success">You&apos;re under your calorie target this week</Text>;
+      return <Text type="success">Bạn đang dưới mức mục tiêu calorie tuần này</Text>;
     } else {
-      return <Text type="secondary">You&apos;re on track with your calorie target this week</Text>;
+      return <Text type="secondary">Bạn đang đúng hướng với mục tiêu calorie tuần này</Text>;
     }
   };
 
   return (
     <Card 
-      title="Weekly Calorie Summary"
+      title="Tổng kết Calorie Hàng Tuần"
       className={styles.statisticsCard}
       bordered={false}
     >
       <Row gutter={[16, 24]}>
         <Col xs={24} md={8}>
           <Statistic
-            title="Weekly Intake"
+            title="Tiêu thụ Tuần"
             value={summary.totalCaloIntake}
             suffix="kcal"
             prefix={<FireOutlined className={styles.statisticIcon} />}
@@ -70,7 +70,7 @@ const CalorieStatistics: React.FC<StatisticsProps> = ({ weeklySummary, loading }
         </Col>
         <Col xs={24} md={8}>
           <Statistic
-            title="Weekly Target"
+            title="Mục tiêu Tuần"
             value={summary.totalCaloTarget}
             suffix="kcal"
             prefix={<AimOutlined className={styles.statisticIcon} />}
@@ -79,7 +79,7 @@ const CalorieStatistics: React.FC<StatisticsProps> = ({ weeklySummary, loading }
         </Col>
         <Col xs={24} md={8}>
           <Statistic
-            title="Weekly Difference"
+            title="Chênh lệch Tuần"
             value={summary.caloDiff}
             suffix="kcal"
             valueStyle={{ 
@@ -93,7 +93,7 @@ const CalorieStatistics: React.FC<StatisticsProps> = ({ weeklySummary, loading }
 
       <div className={styles.progressSection}>
         <div className={styles.progressTitle}>
-          <BarChartOutlined /> Weekly Target Progress
+          <BarChartOutlined /> Tiến độ Mục tiêu Tuần
         </div>
         <Progress 
           percent={percentage} 

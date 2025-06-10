@@ -71,17 +71,17 @@ const CalorieTable: React.FC<CalorieTableProps> = ({ weeklyData, loading, onEdit
         const diff = record.caloDiff;
         
         if (diff > 300) {
-          return <Tag color="red">Over Target</Tag>;
+          return <Tag color="red">Vượt mục tiêu</Tag>;
         } else if (diff < -300) {
-          return <Tag color="green">Under Target</Tag>;
+          return <Tag color="green">Dưới mục tiêu</Tag>;
         } else {
-          return <Tag color="blue">On Target</Tag>;
+          return <Tag color="blue">Đạt mục tiêu</Tag>;
         }
       },
       filters: [
-        { text: 'Over Target', value: 'over' },
-        { text: 'On Target', value: 'on' },
-        { text: 'Under Target', value: 'under' },
+        { text: 'Vượt mục tiêu', value: 'over' },
+        { text: 'Đạt mục tiêu', value: 'on' },
+        { text: 'Dưới mục tiêu', value: 'under' },
       ],
       onFilter: (value: string | number | boolean, record: API.DailyCalorieSummary) => {
         if (value === 'over') return record.caloDiff > 300;
@@ -94,7 +94,7 @@ const CalorieTable: React.FC<CalorieTableProps> = ({ weeklyData, loading, onEdit
   // Add edit action if onEdit is provided
   if (onEdit) {
     columns.push({
-      title: 'Action',
+      title: 'Hành động',
       dataIndex: 'action',
       key: 'action',
       render: (_: any, record: API.DailyCalorieSummary) => (
@@ -103,7 +103,7 @@ const CalorieTable: React.FC<CalorieTableProps> = ({ weeklyData, loading, onEdit
           icon={<EditOutlined />} 
           onClick={() => onEdit(record.date)}
         >
-          Edit
+          Sửa
         </Button>
       ),
     });
@@ -113,8 +113,8 @@ const CalorieTable: React.FC<CalorieTableProps> = ({ weeklyData, loading, onEdit
     <Card 
       title={
         <div>
-          Daily Records
-          <Tooltip title="Click on column headers to sort, or use filters to organize your data">
+          Thống kê hàng ngày
+          <Tooltip title="Nhấp vào tiêu đề cột để sắp xếp, hoặc sử dụng bộ lọc để tổ chức dữ liệu của bạn">
             <InfoCircleOutlined style={{ marginLeft: 8 }} />
           </Tooltip>
         </div>
@@ -139,7 +139,7 @@ const CalorieTable: React.FC<CalorieTableProps> = ({ weeklyData, loading, onEdit
         />
       ) : (
         <Empty 
-          description="No entries found. Start tracking your calories!"
+          description="Không tìm thấy dữ liệu nào. Hãy bắt đầu theo dõi lượng calo của bạn!"
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       )}

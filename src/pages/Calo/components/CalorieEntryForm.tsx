@@ -9,7 +9,6 @@ import {
   Col,
   Statistic,
   Divider,
-  Select,
 } from 'antd';
 import { PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -79,9 +78,9 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
     return current && current > moment().endOf('day');
   };
 
-  return (
-    <Card 
-      title={isUpdate ? 'Update Calorie Entry' : 'Add New Calorie Entry'}
+   return (
+     <Card 
+      title={isUpdate ? 'Cập nhật thông tin dinh dưỡng' : 'Thêm thông tin dinh dưỡng mới'}
       className={styles.formCard}
       bordered={false}
     >
@@ -92,7 +91,6 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
         onValuesChange={recalculate}
         initialValues={{
           date: moment(),
-          meals: 3,
           protein: 0,
           carb: 0,
           fat: 0,
@@ -103,8 +101,8 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
           <Col xs={24} sm={12}>
             <Form.Item
               name="date"
-              label="Date"
-              rules={[{ required: true, message: 'Please select a date' }]}
+              label="Ngày"
+              rules={[{ required: true, message: 'Vui lòng chọn ngày' }]}
             >
               <DatePicker 
                 style={{ width: '100%' }} 
@@ -114,22 +112,6 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
               />
             </Form.Item>
           </Col>
-          <Col xs={24} sm={12}>
-            <Form.Item
-              name="meals"
-              label="Number of Meals"
-              rules={[{ required: true, message: 'Please enter number of meals' }]}
-            >
-              <Select>
-                <Select.Option value={1}>1 meal</Select.Option>
-                <Select.Option value={2}>2 meals</Select.Option>
-                <Select.Option value={3}>3 meals</Select.Option>
-                <Select.Option value={4}>4 meals</Select.Option>
-                <Select.Option value={5}>5 meals</Select.Option>
-                <Select.Option value={6}>6+ meals</Select.Option>
-              </Select>
-            </Form.Item>
-          </Col>
         </Row>
 
         <Row gutter={16}>
@@ -137,7 +119,7 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
             <Form.Item
               name="protein"
               label="Protein (g)"
-              rules={[{ required: true, message: 'Please enter protein amount' }]}
+              rules={[{ required: true, message: 'Vui lòng nhập lượng protein' }]}
             >
               <InputNumber 
                 style={{ width: '100%' }} 
@@ -149,8 +131,8 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
           <Col xs={24} sm={8}>
             <Form.Item
               name="carb"
-              label="Carbs (g)"
-              rules={[{ required: true, message: 'Please enter carb amount' }]}
+              label="Tinh bột (g)"
+              rules={[{ required: true, message: 'Vui lòng nhập lượng tinh bột' }]}
             >
               <InputNumber 
                 style={{ width: '100%' }} 
@@ -162,8 +144,8 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
           <Col xs={24} sm={8}>
             <Form.Item
               name="fat"
-              label="Fat (g)"
-              rules={[{ required: true, message: 'Please enter fat amount' }]}
+              label="Chất béo (g)"
+              rules={[{ required: true, message: 'Vui lòng nhập lượng chất béo' }]}
             >
               <InputNumber 
                 style={{ width: '100%' }} 
@@ -173,11 +155,10 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
             </Form.Item>
           </Col>
         </Row>
-
         <Form.Item
           name="caloTarget"
-          label="Calorie Target (kcal)"
-          rules={[{ required: true, message: 'Please enter your calorie target' }]}
+          label="Mục tiêu calorie (kcal)"
+          rules={[{ required: true, message: 'Vui lòng nhập mục tiêu calorie' }]}
         >
           <InputNumber 
             style={{ width: '100%' }} 
@@ -192,7 +173,7 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
         <Row gutter={24} className={styles.calculatedRow}>
           <Col xs={24} md={8}>
             <Statistic 
-              title="Total Calorie Intake" 
+              title="Tổng lượng calorie" 
               value={calculatedValues.totalCaloIntake} 
               suffix="kcal"
               precision={0}
@@ -200,7 +181,7 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
           </Col>
           <Col xs={24} md={8}>
             <Statistic 
-              title="Calorie Difference" 
+              title="Chênh lệch calorie" 
               value={calculatedValues.caloDiff} 
               precision={0}
               valueStyle={{ 
@@ -218,7 +199,7 @@ const CalorieEntryForm: React.FC<CalorieFormProps> = ({
               icon={isUpdate ? <SaveOutlined /> : <PlusOutlined />}
               block
             >
-              {isUpdate ? 'Update Entry' : 'Add Entry'}
+              {isUpdate ? 'Cập nhật' : 'Thêm mới'}
             </Button>
           </Col>
         </Row>
