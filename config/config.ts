@@ -5,7 +5,14 @@ import routes from './routes';
 import proxy from './proxy';
 
 // Xác định môi trường (dev | test | pre)
-const { REACT_APP_ENV = 'dev', UMI_APP_API_URL = '', APP_CONFIG_TEN_TRUONG = '', APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH = '', APP_CONFIG_TIEN_TO_TRUONG = '' } = process.env;
+const { 
+  REACT_APP_ENV = 'dev', 
+  UMI_APP_API_URL = '', 
+  APP_CONFIG_TEN_TRUONG = '', 
+  APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH = '', 
+  APP_CONFIG_TIEN_TO_TRUONG = '',
+  APP_CONFIG_TITLE_CONNECT = 'Connect' // Thêm biến này với giá trị mặc định
+} = process.env;
 // Kiểu an toàn cho proxy keys
 type ProxyEnv = keyof typeof proxy;
 const env = REACT_APP_ENV as ProxyEnv;
@@ -55,5 +62,7 @@ export default defineConfig({
     APP_CONFIG_TIEN_TO_TRUONG: APP_CONFIG_TIEN_TO_TRUONG,
     // Biến API URL
     UMI_APP_API_URL: UMI_APP_API_URL,
+    // Thêm biến bị thiếu
+    APP_CONFIG_TITLE_CONNECT: APP_CONFIG_TITLE_CONNECT,
   },
 });

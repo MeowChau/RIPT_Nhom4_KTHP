@@ -4,3 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "16"
+
+# Cấu hình SPA fallback - đây là phần quan trọng cho routing client-side
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
